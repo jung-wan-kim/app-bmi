@@ -1,48 +1,102 @@
-# Dependencies
-node_modules/
-package-lock.json
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
 
 # Environment variables
 .env
 .env.local
-.env.*.local
+.env.production
 
-# MCP logs
-logs/
-*.log
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/Flutter/flutter_export_environment.sh
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
 
-# Build outputs
-dist/
-build/
-.next/
-out/
+# Android
+android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+android/local.properties
+android/.gradle/
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/app/src/main/java/io/flutter/plugins/
 
-# Platform specific
-*.apk
-*.ipa
-*.app
-*.dmg
-*.pkg
+# Web
+web/flutter_service_worker.js
+web/version.json
+web/main.dart.js
+web/flutter.js
+web/manifest.json
+web/.last_build_id
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-.DS_Store
-
-# Temporary files
-*.tmp
-*.temp
-.cache/
-
-# Test coverage
+# Coverage
 coverage/
-.nyc_output/
+
+# Exceptions to above rules.
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# Node modules (if any)
+node_modules/
+
+# Logs
+logs/
 
 # Supabase
 supabase/.temp/
 supabase/.branches/
 
-# Figma tokens (keep .env.example)
-.figma-token
+# Temporary files
+*.tmp
+*.temp
+.cache/
