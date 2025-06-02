@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "TikTok Clone",
+    "slug": "tiktok-clone-expo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.tiktokclone"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.example.tiktokclone"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
