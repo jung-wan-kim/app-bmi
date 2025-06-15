@@ -1,26 +1,26 @@
 {
   "expo": {
-    "name": "TikTok Clone",
-    "slug": "tiktok-clone-expo",
+    "name": "App Forge",
+    "slug": "app-forge",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "dark",
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#FFFFFF"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.example.tiktokclone"
+      "bundleIdentifier": "com.example.appforge"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#FFFFFF"
       },
-      "package": "com.example.tiktokclone"
+      "package": "com.example.appforge"
     },
     "web": {
       "favicon": "./assets/favicon.png"
