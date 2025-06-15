@@ -41,73 +41,65 @@ flutter test test/widget_test.dart
 
 ## Architecture Overview
 
-This is a TikTok clone app built with Flutter, featuring a vertical video feed with social features.
+App Forge is an AI-powered application that transforms Figma designs into Flutter code.
 
 ### State Management
 - **flutter_riverpod** (v2.4.9) - Used for state management across the app
 - Provider pattern with ProviderScope wrapping the main app
 
 ### Backend Integration  
-- **supabase_flutter** (v2.3.2) - Backend service for data storage
-- Initialized in main.dart with project-specific URL and anon key
-- Used for user data, video metadata, and social features
+- **supabase_flutter** (v2.3.2) - Backend service for:
+  - User authentication
+  - Project storage
+  - Generated code management
+  - API integration
 
-### Video Playback
-- **video_player** (v2.8.2) - Core video playback functionality
-- **chewie** (v1.7.4) - Video player UI wrapper
-- Custom VideoPlayerItem widget handles:
-  - Network video loading
-  - Play/pause on tap
-  - Looping playback
-  - Loading states
+### HTTP Communications
+- **dio** (v5.4.0) - Advanced HTTP client for API requests
+- **http** (v1.1.0) - Simple HTTP requests
 
-### Navigation Structure
-- MainScreen acts as the navigation container
-- Bottom navigation with 5 tabs:
-  1. Home (video feed)
-  2. Discover (search)
-  3. Upload (gradient button)
-  4. Inbox (messages)
-  5. Profile (user profile)
-- System UI mode changes based on current screen (immersive for home)
-
-### Key UI Patterns
-- **Vertical PageView** - Swipe navigation between videos
-- **Stack-based layouts** - Overlaying UI elements on videos
-- **Gradient effects** - TikTok-style upload button and overlays
-- **Action buttons** - Right-side vertical button layout for interactions
+### Key Features to Implement
+1. **Figma Integration** - Connect to Figma API to fetch designs
+2. **AI Code Generation** - Process designs and generate Flutter code
+3. **Project Management** - Handle multiple projects and versions
+4. **Code Preview** - Live preview of generated code
+5. **Export Options** - Download generated Flutter project
 
 ## Project Structure
 
 ```
 lib/
-├── main.dart                 # App entry, Supabase init, theme config
-├── models/
-│   └── video_model.dart     # Video data model with sample data
-├── screens/
-│   ├── main_screen.dart     # Navigation container, bottom tabs
-│   ├── home_screen.dart     # Video feed with PageView
-│   ├── discover_screen.dart # Search/explore screen
-│   ├── upload_screen.dart   # Video upload interface  
-│   ├── inbox_screen.dart    # Messages screen
-│   └── profile_screen.dart  # User profile screen
-└── widgets/
-    └── video_player_item.dart # Reusable video player component
+├── main.dart              # App entry, Supabase init, Material3 theme
+├── models/               # Data models (to be created)
+│   ├── project.dart     # Project model
+│   ├── figma_design.dart # Figma design model
+│   └── generated_code.dart # Generated code model
+├── screens/              # App screens (to be created)
+│   ├── home_screen.dart # Project list
+│   ├── import_screen.dart # Figma import
+│   ├── generation_screen.dart # Code generation
+│   └── preview_screen.dart # Code preview
+├── services/             # Business logic (to be created)
+│   ├── figma_service.dart # Figma API integration
+│   ├── ai_service.dart   # AI code generation
+│   └── storage_service.dart # Supabase storage
+└── widgets/              # Reusable widgets (to be created)
+    └── code_viewer.dart  # Code display widget
 ```
 
 ## Code Patterns
 
 ### Widget Structure
-- Stateful widgets for screens with dynamic content
-- Separation of presentation (widgets) and data (models)
-- Custom widgets for reusable components
+- Use StatefulWidget for screens with dynamic content
+- Use StatelessWidget for static UI components
+- Implement responsive design for various screen sizes
 
-### Styling Approach
-- Dark theme by default (black background)
-- Inline styling with TextStyle and Container decorations
-- Custom gradients for TikTok-style effects
+### Service Layer
+- Separate business logic from UI
+- Use dependency injection with Riverpod
+- Handle errors gracefully with proper error states
 
 ### Data Flow
-- Sample data provided via static methods (VideoModel.getSampleVideos())
-- Ready for Supabase integration for real data
-- Local state management for UI interactions (likes, play/pause)
+- Figma Design → AI Service → Generated Code → Preview
+- Store projects in Supabase for persistence
+- Cache generated code locally for performance

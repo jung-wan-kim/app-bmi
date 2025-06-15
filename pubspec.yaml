@@ -1,5 +1,5 @@
-name: tiktok_clone_flutter
-description: A TikTok clone app built with Flutter
+name: app_forge
+description: Build mobile apps from Figma designs with AI
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -20,9 +20,9 @@ dependencies:
   # Backend & Database
   supabase_flutter: ^2.3.2
   
-  # Video Player
-  video_player: ^2.8.2
-  chewie: ^1.7.4
+  # HTTP & API
+  http: ^1.1.0
+  dio: ^5.4.0
   
   # Utils
   shared_preferences: ^2.2.2

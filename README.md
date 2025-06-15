@@ -1,24 +1,26 @@
-# 📱 TikTok Clone - Flutter
+# 🛠️ App Forge
 
-A TikTok clone app built with Flutter, featuring modern UI and video playback functionality.
+Build mobile apps from Figma designs with AI
 
-## 🚀 Features
+## 🚀 Overview
 
-- ✨ Full-screen video feed with swipe navigation
-- ❤️ Like, comment, and share functionality
-- 📱 Bottom tab navigation (Home, Discover, Upload, Inbox, Me)
-- 🎬 Video playback with pause/play on tap
-- 🌈 TikTok-style upload button with gradient effect
-- 👤 User profile with stats and content grid
+App Forge is an AI-powered tool that transforms Figma designs into fully functional Flutter applications. Simply provide your Figma design and let AI handle the code generation.
+
+## ✨ Features
+
+- 🎨 **Figma to Flutter** - Convert Figma designs to Flutter code
+- 🤖 **AI-Powered** - Intelligent code generation using advanced AI
+- 📱 **Cross-Platform** - Generate iOS and Android apps from one codebase
+- 🔧 **Customizable** - Generated code is clean and easy to modify
+- ⚡ **Fast Development** - Reduce development time by 70%
 
 ## 🛠 Tech Stack
 
 - **Flutter** 3.24.5
 - **Dart** 3.0+
 - **flutter_riverpod** - State Management
-- **video_player** - Video Playback
 - **supabase_flutter** - Backend Integration
-- **cached_network_image** - Image Caching
+- **dio** - HTTP Client
 
 ## 📦 Installation
 
@@ -34,33 +36,26 @@ flutter pub get
 flutter run
 ```
 
+## 🚀 Getting Started
+
+1. **Prepare your Figma design**
+   - Ensure your design follows Flutter-friendly patterns
+   - Use proper naming conventions for layers
+
+2. **Configure the project**
+   - Set up your Supabase credentials in `lib/main.dart`
+   - Configure API endpoints
+
+3. **Run the app**
+   ```bash
+   flutter run
+   ```
+
 ## 📱 Supported Platforms
 
 - iOS 11.0+
 - Android 5.0+
-- Web (experimental)
-
-## 📂 Project Structure
-
-```
-lib/
-├── main.dart              # App entry point
-├── models/               # Data models
-│   └── video_model.dart
-├── screens/              # App screens
-│   ├── main_screen.dart
-│   ├── home_screen.dart
-│   ├── discover_screen.dart
-│   ├── upload_screen.dart
-│   ├── inbox_screen.dart
-│   └── profile_screen.dart
-└── widgets/              # Reusable widgets
-    └── video_player_item.dart
-```
-
-## 🎨 Screenshots
-
-(Add screenshots here)
+- Web (coming soon)
 
 ## 🤝 Contributing
 
