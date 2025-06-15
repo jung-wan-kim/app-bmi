@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ 중요 알림 - 반드시 기억할 것!
+**모든 주요 작업 완료 시 텔레그램 알림을 보내야 합니다!**
+- 상세 정보는 `.rp/TELEGRAM_REMINDER.md` 참조
+- Git 커밋/푸시 후 반드시 텔레그램 알림 전송
+- Bot Token: 8089755627:AAFyW6jMNEBt33cvdZyOOAGOSmGP4PR88xc
+- Chat ID: 55511334
+
 ## Project Overview
 
 BMI Tracker is a comprehensive weight management mobile application that helps users track their weight, BMI, and visualize their fitness journey through graphs and character representations.
