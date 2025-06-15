@@ -50,16 +50,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> _checkAuthAndNavigate() async {
     await Future.delayed(const Duration(seconds: 2)); // 스플래시 최소 표시 시간
 
-    final supabase = Supabase.instance.client;
-    final session = supabase.auth.currentSession;
     final prefs = await SharedPreferences.getInstance();
     final hasCompletedOnboarding = 
         prefs.getBool(AppConstants.keyOnboardingCompleted) ?? false;
+    
+    // 데모 모드 확인
+    final isDemoMode = prefs.getBool('isDemoMode') ?? false;
 
     if (!mounted) return;
 
-    if (session != null) {
-      // 로그인된 경우
+    if (isDemoMode) {
+      // 데모 모드인 경우 바로 홈으로
       context.go('/home');
     } else if (!hasCompletedOnboarding) {
       // 온보딩 미완료

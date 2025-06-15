@@ -167,7 +167,7 @@ class OnboardingPage extends StatelessWidget {
           // 애니메이션 또는 아이콘
           SizedBox(
             height: 200,
-            child: _buildAnimation(),
+            child: _buildAnimation(context),
           ),
           const SizedBox(height: 48),
           
@@ -194,10 +194,10 @@ class OnboardingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimation() {
+  Widget _buildAnimation(BuildContext context) {
     // Lottie 파일이 없을 경우 아이콘으로 대체
     return FutureBuilder(
-      future: DefaultAssetBundle.of(context as BuildContext)
+      future: DefaultAssetBundle.of(context)
           .load(data.animationAsset),
       builder: (context, snapshot) {
         if (snapshot.hasData) {

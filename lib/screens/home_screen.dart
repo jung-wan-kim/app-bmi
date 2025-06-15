@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_constants.dart';
 import '../core/utils/bmi_calculator.dart';
@@ -16,10 +17,31 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedIndex = 0;
   
-  // 임시 데이터
-  final double currentWeight = 70.5;
-  final double height = 170;
-  final double targetWeight = 65;
+  // 데모 데이터
+  double currentWeight = 70.5;
+  double height = 170;
+  double targetWeight = 65;
+  String userName = '사용자';
+  bool isDemoMode = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+  
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isDemoMode = prefs.getBool('isDemoMode') ?? false;
+      if (isDemoMode) {
+        userName = prefs.getString('demoUserName') ?? '데모 사용자';
+        height = prefs.getDouble('demoUserHeight') ?? 170.0;
+        currentWeight = prefs.getDouble('demoUserWeight') ?? 65.0;
+        targetWeight = 60.0; // 데모 목표 체중
+      }
+    });
+  }
   
   double get currentBMI => BMICalculator.calculateBMI(currentWeight, height);
   BMICategory get bmiCategory => BMICalculator.getBMICategory(currentBMI);
@@ -34,6 +56,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 데모 모드 배너
+              if (isDemoMode)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: AppColors.warning.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, color: AppColors.warning, size: 16),
+                      const SizedBox(width: 8),
+                      Text(
+                        '데모 모드로 실행 중입니다',
+                        style: TextStyle(
+                          color: AppColors.warning,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              
               // 헤더
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,7 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '안녕하세요! 👋',
+                        '안녕하세요, $userName님! 👋',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 4),

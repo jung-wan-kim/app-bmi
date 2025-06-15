@@ -104,7 +104,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
   Widget build(BuildContext context) {
     final weight = double.tryParse(_weightController.text) ?? 0;
     final bmi = weight > 0 ? BMICalculator.calculateBMI(weight, userHeight) : 0;
-    final bmiCategory = weight > 0 ? BMICalculator.getBMICategory(bmi) : null;
+    final bmiCategory = weight > 0 ? BMICalculator.getBMICategory(bmi.toDouble()) : null;
     
     return Scaffold(
       backgroundColor: AppColors.background,

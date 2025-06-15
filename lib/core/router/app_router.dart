@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../screens/splash_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
@@ -77,22 +78,26 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
     
     // 리다이렉트 로직
-    redirect: (context, state) {
+    redirect: (context, state) async {
       final supabase = Supabase.instance.client;
       final session = supabase.auth.currentSession;
       final isLoggedIn = session != null;
       
+      // SharedPreferences에서 데모 모드 확인
+      final prefs = await SharedPreferences.getInstance();
+      final isDemoMode = prefs.getBool('isDemoMode') ?? false;
+      
       final isAuthRoute = state.matchedLocation == '/login' ||
           state.matchedLocation == '/onboarding';
       
-      // 로그인하지 않은 경우
-      if (!isLoggedIn && !isAuthRoute && state.matchedLocation != '/') {
-        return '/login';
+      // 데모 모드이거나 로그인한 경우
+      if ((isDemoMode || isLoggedIn) && isAuthRoute) {
+        return '/home';
       }
       
-      // 로그인한 경우 auth 라우트 접근 방지
-      if (isLoggedIn && isAuthRoute) {
-        return '/home';
+      // 로그인하지 않았고 데모 모드도 아닌 경우
+      if (!isLoggedIn && !isDemoMode && !isAuthRoute && state.matchedLocation != '/') {
+        return '/login';
       }
       
       return null;

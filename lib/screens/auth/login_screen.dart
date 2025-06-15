@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_constants.dart';
 
@@ -81,6 +82,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           backgroundColor: AppColors.error,
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _enterDemoMode() async {
+    setState(() => _isLoading = true);
+    
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isDemoMode', true);
+      await prefs.setBool(AppConstants.keyOnboardingCompleted, true);
+      
+      if (mounted) {
+        // 데모 사용자 정보 설정
+        await prefs.setString('demoUserName', '데모 사용자');
+        await prefs.setDouble('demoUserHeight', 170.0);
+        await prefs.setDouble('demoUserWeight', 65.0);
+        await prefs.setString('demoUserGender', 'male');
+        
+        // 홈 화면으로 이동
+        context.go('/home');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('데모 모드 진입 실패: $e'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -224,6 +259,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ],
               
               const SizedBox(height: 32),
+              
+              // 데모 모드 버튼
+              TextButton(
+                onPressed: _enterDemoMode,
+                child: Text(
+                  '데모 모드로 시작하기',
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 16),
               
               // 약관
               Text(

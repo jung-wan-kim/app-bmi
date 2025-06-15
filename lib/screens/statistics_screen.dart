@@ -211,7 +211,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
           ),
           const SizedBox(height: 8),
           Row(
-            baseline: TextBaseline.alphabetic,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(

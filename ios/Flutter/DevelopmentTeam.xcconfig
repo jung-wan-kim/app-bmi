@@ -1,0 +1,7 @@
+#include? "DevelopmentTeam.local.xcconfig"
+
+// 개발 팀 설정
+// 1. Xcode에서 Runner 프로젝트를 열고
+// 2. Signing & Capabilities 탭에서 Team 선택
+// 3. 또는 DevelopmentTeam.local.xcconfig 파일을 만들어서 설정:
+//    DEVELOPMENT_TEAM = YOUR_TEAM_ID
