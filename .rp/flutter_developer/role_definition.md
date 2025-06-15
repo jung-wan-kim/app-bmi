@@ -1,4 +1,4 @@
-# FLUTTER_DEVELOPER Role Definition
+# FLUTTER_DEVELOPER 역할 정의
 
 ## 역할 개요
 Flutter 프레임워크를 활용하여 크로스 플랫폼 모바일 애플리케이션의 프론트엔드를 개발

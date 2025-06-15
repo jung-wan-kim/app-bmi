@@ -1,4 +1,4 @@
-# DEVOPS_ENGINEER Role Definition
+# DEVOPS_ENGINEER 역할 정의
 
 ## 역할 개요
 애플리케이션의 빌드, 배포, 모니터링을 자동화하고 안정적인 운영 환경을 구축

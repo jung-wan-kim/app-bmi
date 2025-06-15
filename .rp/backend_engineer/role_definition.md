@@ -1,4 +1,4 @@
-# BACKEND_ENGINEER Role Definition
+# BACKEND_ENGINEER 역할 정의
 
 ## 역할 개요
 Supabase를 활용하여 안정적이고 확장 가능한 백엔드 시스템을 구축하고 관리

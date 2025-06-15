@@ -1,4 +1,4 @@
-# UI_UX_DESIGNER Role Definition
+# UI_UX_DESIGNER 역할 정의
 
 ## 역할 개요
 사용자 중심의 직관적이고 매력적인 인터페이스를 설계하여 최상의 사용자 경험 제공

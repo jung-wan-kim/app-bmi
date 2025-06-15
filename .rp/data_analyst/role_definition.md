@@ -1,4 +1,4 @@
-# DATA_ANALYST Role Definition
+# DATA_ANALYST 역할 정의
 
 ## 역할 개요
 체중 관리 데이터를 분석하고 사용자에게 의미 있는 인사이트를 제공하는 알고리즘 개발

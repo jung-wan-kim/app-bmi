@@ -1,4 +1,4 @@
-# PM_COORDINATOR Role Definition
+# PM_COORDINATOR 역할 정의
 
 ## 역할 개요
 프로젝트 전체를 관리하고 각 RP 간의 협업을 조율하는 중추적 역할
@@ -25,7 +25,7 @@
    - 보고서 작성 및 공유
 
 ## 필요 역량
-- 프로젝트 관리 방법론 (Agile/Scrum)
+- 프로젝트 관리 방법론 (애자일/스크럼)
 - 커뮤니케이션 및 리더십
 - 기술적 이해도
 - 문제 해결 능력
@@ -35,7 +35,7 @@
 - 프로젝트 관리: Jira, Trello, Notion
 - 커뮤니케이션: Slack, Discord
 - 문서화: Confluence, Google Docs
-- 일정 관리: Google Calendar, Gantt charts
+- 일정 관리: Google Calendar, 간트 차트
 
 ## 협업 대상
 - 모든 RP와 직접적인 소통

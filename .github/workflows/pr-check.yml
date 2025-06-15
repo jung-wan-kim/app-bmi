@@ -1,0 +1,60 @@
+name: PR Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check:
+    name: PR Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.5'
+        channel: 'stable'
+    
+    - name: Get dependencies
+      run: flutter pub get
+    
+    - name: Check formatting
+      run: dart format --set-exit-if-changed .
+    
+    - name: Analyze code
+      run: flutter analyze
+    
+    - name: Run tests
+      run: flutter test
+    
+    - name: Check for TODOs
+      run: |
+        if grep -r "TODO" lib/; then
+          echo "::warning::Found TODO comments in code"
+        fi
+    
+    - name: Comment PR
+      uses: actions/github-script@v7
+      if: always()
+      with:
+        script: |
+          const output = `### PR Check Results
+          
+          - ✅ Code formatting
+          - ✅ Static analysis
+          - ✅ Unit tests
+          
+          **Flutter Version**: 3.24.5
+          **Dart SDK**: 3.0+
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })

@@ -1,4 +1,4 @@
-# CHARACTER_DESIGNER Role Definition
+# CHARACTER_DESIGNER 역할 정의
 
 ## 역할 개요
 BMI 수치에 따라 변화하는 캐릭터 시스템을 설계하고 사용자의 동기부여를 위한 시각적 피드백 제공

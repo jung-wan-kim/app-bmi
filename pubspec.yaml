@@ -25,7 +25,6 @@ dependencies:
   dio: ^5.4.0
   
   # Utils
-  shared_preferences: ^2.2.2
   intl: ^0.18.1
   
   # Image & File
@@ -34,6 +33,20 @@ dependencies:
   
   # Permissions
   permission_handler: ^11.2.0
+  
+  # Authentication
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^5.0.0
+  
+  # Charts & Animations
+  fl_chart: ^0.68.0
+  lottie: ^3.1.2
+  
+  # Navigation
+  go_router: ^14.2.0
+  
+  # Local Storage
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,4 @@
-package com.example.app_forge
+package com.bmitracker.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,4 +1,4 @@
-# QA_TESTER Role Definition
+# QA_TESTER 역할 정의
 
 ## 역할 개요
 애플리케이션의 품질을 보증하고 사용자에게 안정적이고 버그 없는 경험을 제공하도록 테스트
