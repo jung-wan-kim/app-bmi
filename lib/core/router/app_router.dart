@@ -12,6 +12,7 @@ import '../../screens/home_screen.dart';
 import '../../screens/weight_input_screen.dart';
 import '../../screens/statistics_screen.dart';
 import '../../screens/settings_screen.dart';
+import '../../screens/goal_setting_screen.dart';
 
 /// 라우터 프로바이더
 final routerProvider = Provider<GoRouter>((ref) {
@@ -73,6 +74,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'settings',
             builder: (context, state) => const SettingsScreen(),
           ),
+          
+          // 목표 설정
+          GoRoute(
+            path: 'goal-setting',
+            name: 'goalSetting',
+            builder: (context, state) => const GoalSettingScreen(),
+          ),
         ],
       ),
     ],
@@ -115,4 +123,5 @@ class AppRoutes {
   static const String weightInput = 'weightInput';
   static const String statistics = 'statistics';
   static const String settings = 'settings';
+  static const String goalSetting = 'goalSetting';
 }

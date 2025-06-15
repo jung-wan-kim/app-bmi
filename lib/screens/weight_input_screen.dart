@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_constants.dart';
 import '../core/utils/bmi_calculator.dart';
+import '../providers/weight_records_provider.dart';
 
 class WeightInputScreen extends ConsumerStatefulWidget {
   const WeightInputScreen({super.key});
@@ -21,8 +23,21 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
   
-  // 임시 데이터 (실제로는 프로바이더에서 가져옴)
-  final double userHeight = 170.0;
+  double userHeight = 170.0;
+  bool isLoading = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _loadUserHeight();
+  }
+  
+  Future<void> _loadUserHeight() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userHeight = prefs.getDouble('demoUserHeight') ?? 170.0;
+    });
+  }
   
   @override
   void dispose() {
@@ -85,18 +100,57 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
   
   Future<void> _saveWeight() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: 실제 저장 로직 구현
+      setState(() => isLoading = true);
       
-      // 성공 메시지 표시
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('체중이 기록되었습니다'),
-          backgroundColor: AppColors.success,
-        ),
-      );
-      
-      // 홈으로 돌아가기
-      context.pop();
+      try {
+        final weight = double.parse(_weightController.text);
+        final recordedAt = DateTime(
+          _selectedDate.year,
+          _selectedDate.month,
+          _selectedDate.day,
+          _selectedTime.hour,
+          _selectedTime.minute,
+        );
+        
+        await ref.read(weightRecordsProvider.notifier).addRecord(
+          weight: weight,
+          height: userHeight,
+          recordedAt: recordedAt,
+          notes: _notesController.text.isNotEmpty ? _notesController.text : null,
+        );
+        
+        // 데모 모드일 경우 현재 체중 업데이트
+        final prefs = await SharedPreferences.getInstance();
+        if (prefs.getBool('isDemoMode') ?? false) {
+          await prefs.setDouble('demoUserWeight', weight);
+        }
+        
+        if (mounted) {
+          // 성공 메시지 표시
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('체중이 기록되었습니다'),
+              backgroundColor: AppColors.success,
+            ),
+          );
+          
+          // 홈으로 돌아가기
+          context.pop();
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('오류가 발생했습니다: $e'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => isLoading = false);
+        }
+      }
     }
   }
   
@@ -313,8 +367,17 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
                 
                 // 저장 버튼
                 ElevatedButton(
-                  onPressed: _saveWeight,
-                  child: const Text('체중 기록하기'),
+                  onPressed: isLoading ? null : _saveWeight,
+                  child: isLoading 
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text('체중 기록하기'),
                 ),
               ],
             ),
