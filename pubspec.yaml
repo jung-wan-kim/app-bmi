@@ -25,7 +25,7 @@ dependencies:
   dio: ^5.4.0
   
   # Utils
-  intl: ^0.18.1
+  intl: ^0.20.2
   
   # Image & File
   image_picker: ^1.0.7
