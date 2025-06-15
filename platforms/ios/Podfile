@@ -1,7 +1,0 @@
-platform :ios, '13.0'
-
-target 'TikTokClone' do
-  use_frameworks!
-  
-  # 필요한 경우 추가 팟 설치
-end
