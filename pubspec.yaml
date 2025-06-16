@@ -38,7 +38,7 @@ dependencies:
   
   # Authentication
   google_sign_in: ^6.2.1
-  sign_in_with_apple: ^5.0.0
+  sign_in_with_apple: ^7.0.1
   
   # Charts & Animations
   fl_chart: ^0.68.0
