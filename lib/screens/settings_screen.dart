@@ -200,6 +200,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
               const SizedBox(height: 24),
               
+              // 프로필 정보
+              _buildSection(
+                title: '프로필 정보',
+                children: [
+                  ListTile(
+                    title: const Text('키'),
+                    subtitle: Text('${_userHeight.toStringAsFixed(1)} $_selectedHeightUnit'),
+                    leading: const Icon(Icons.height),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: _showHeightInput,
+                  ),
+                  ListTile(
+                    title: const Text('성별'),
+                    subtitle: Text(_userGender == 'male' ? '남성' : '여성'),
+                    leading: const Icon(Icons.person),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: _showGenderSelection,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              
               // 앱 설정
               _buildSection(
                 title: '앱 설정',
@@ -347,5 +369,139 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ],
       ),
     );
+  }
+
+  void _showHeightInput() {
+    final controller = TextEditingController(text: _userHeight.toStringAsFixed(1));
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('키 입력'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: '키 ($_selectedHeightUnit)',
+                border: OutlineInputBorder(),
+                suffixText: _selectedHeightUnit,
+              ),
+              autofocus: true,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              _selectedHeightUnit == 'cm' 
+                  ? '일반적인 성인 키: 150-200cm'
+                  : '일반적인 성인 키: 4\'10\"-6\'6\"',
+              style: TextStyle(
+                fontSize: 12,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('취소'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final heightText = controller.text.trim();
+              final height = double.tryParse(heightText);
+              
+              if (height == null || height <= 0) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('올바른 키를 입력해주세요')),
+                );
+                return;
+              }
+              
+              // 키 범위 검증
+              final isValidHeight = _selectedHeightUnit == 'cm' 
+                  ? (height >= 100 && height <= 250)
+                  : (height >= 3.0 && height <= 8.0);
+              
+              if (!isValidHeight) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      _selectedHeightUnit == 'cm' 
+                          ? '키는 100-250cm 범위로 입력해주세요'
+                          : '키는 3-8ft 범위로 입력해주세요'
+                    ),
+                  ),
+                );
+                return;
+              }
+              
+              setState(() {
+                _userHeight = height;
+              });
+              
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setDouble('demoUserHeight', height);
+              
+              if (!mounted) return;
+              Navigator.pop(context);
+              
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('키가 업데이트되었습니다')),
+              );
+            },
+            child: const Text('저장'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showGenderSelection() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('성별 선택'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<String>(
+              title: const Text('남성'),
+              value: 'male',
+              groupValue: _userGender,
+              onChanged: (value) => Navigator.pop(context, value),
+            ),
+            RadioListTile<String>(
+              title: const Text('여성'),
+              value: 'female',
+              groupValue: _userGender,
+              onChanged: (value) => Navigator.pop(context, value),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('취소'),
+          ),
+        ],
+      ),
+    ).then((selectedGender) async {
+      if (selectedGender != null && selectedGender != _userGender) {
+        setState(() {
+          _userGender = selectedGender;
+        });
+        
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userGender', selectedGender);
+        
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('성별이 업데이트되었습니다')),
+        );
+      }
+    });
   }
 }

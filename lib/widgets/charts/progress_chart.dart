@@ -237,26 +237,32 @@ class _ProgressChartState extends State<ProgressChart>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildDetailItem(
-              context,
-              '시작',
-              '${widget.startWeight.toStringAsFixed(1)} kg',
-              Icons.flag_outlined,
-              theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+            Expanded(
+              child: _buildDetailItem(
+                context,
+                '시작',
+                '${widget.startWeight.toStringAsFixed(1)} kg',
+                Icons.flag_outlined,
+                theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+              ),
             ),
-            _buildDetailItem(
-              context,
-              '현재',
-              '${widget.currentWeight.toStringAsFixed(1)} kg',
-              Icons.person,
-              theme.primaryColor,
+            Expanded(
+              child: _buildDetailItem(
+                context,
+                '현재',
+                '${widget.currentWeight.toStringAsFixed(1)} kg',
+                Icons.person,
+                theme.primaryColor,
+              ),
             ),
-            _buildDetailItem(
-              context,
-              '목표',
-              '${widget.targetWeight.toStringAsFixed(1)} kg',
-              Icons.star,
-              AppColors.success,
+            Expanded(
+              child: _buildDetailItem(
+                context,
+                '목표',
+                '${widget.targetWeight.toStringAsFixed(1)} kg',
+                Icons.star,
+                AppColors.success,
+              ),
             ),
           ],
         ),

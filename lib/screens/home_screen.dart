@@ -16,19 +16,15 @@ import '../providers/realtime_sync_provider.dart';
 import '../providers/offline_support_provider.dart';
 import '../providers/theme_provider.dart';
 import '../widgets/weight_history_list.dart';
-import '../widgets/character/bmi_character.dart';
-import '../widgets/character/character_animator.dart';
 import '../widgets/charts/weight_line_chart.dart';
 import '../widgets/charts/bmi_gauge.dart';
 import '../widgets/charts/progress_chart.dart';
 import '../widgets/common/custom_button.dart';
-import '../widgets/common/input_field.dart';
 import '../widgets/animated_widgets.dart';
 import '../core/constants/app_animations.dart';
 import '../core/constants/app_accessibility.dart';
-import '../widgets/accessible_button.dart';
-import '../l10n/app_localizations.dart';
 import '../core/utils/responsive_utils.dart';
+import '../l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -358,27 +354,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ],
                 ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              
-              // BMI 캐릭터
-              ScaleInAnimation(
-                duration: AppAnimations.cardAnimationDuration,
-                delay: AppAnimations.listItemStaggerDelay * 2,
-                child: Semantics(
-                  label: AppAccessibility.getBMIAnnouncement(currentBMI, bmiCategory.displayName),
-                  child: Center(
-                    child: CharacterAnimator(
-                      animationType: AnimationType.float,
-                      child: BMICharacter(
-                        bmi: currentBMI,
-                        targetBmi: 22.0,
-                        size: 200,
-                        style: CharacterStyle.cute,
-                      ),
-                    ),
-                  ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -844,32 +819,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         ],
                                       ),
                                     ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 32),
-                              
-                              // BMI 캐릭터
-                              ScaleInAnimation(
-                                duration: AppAnimations.cardAnimationDuration,
-                                delay: AppAnimations.listItemStaggerDelay * 2,
-                                child: Semantics(
-                                  label: AppAccessibility.getBMIAnnouncement(currentBMI, bmiCategory.displayName),
-                                  child: Center(
-                                    child: CharacterAnimator(
-                                      animationType: AnimationType.float,
-                                      child: BMICharacter(
-                                        bmi: currentBMI,
-                                        targetBmi: 22.0,
-                                        size: ResponsiveUtils.getResponsiveValue(
-                                          context: context,
-                                          mobile: 200,
-                                          tablet: 280,
-                                          desktop: 320,
-                                        ),
-                                        style: CharacterStyle.cute,
-                                      ),
-                                    ),
                                   ),
                                 ),
                               ),
