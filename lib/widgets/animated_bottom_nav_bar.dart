@@ -121,7 +121,7 @@ class _AnimatedNavItemState extends State<_AnimatedNavItem>
                 AnimatedContainer(
                   duration: AppAnimations.normalDuration,
                   curve: AppAnimations.defaultCurve,
-                  child:\1const Icon(
+                  child:const Icon(
                     widget.item.icon,
                     color: widget.isSelected
                         ? AppColors.primary

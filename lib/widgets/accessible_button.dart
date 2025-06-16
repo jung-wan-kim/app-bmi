@@ -136,7 +136,7 @@ class AccessibleIconButton extends StatelessWidget {
             width: AppAccessibility.minTouchTarget,
             height: AppAccessibility.minTouchTarget,
             padding: const EdgeInsets.all(8),
-            child:\1const Icon(
+            child:const Icon(
               icon,
               size: iconSize ?? 24,
               color: onPressed != null ? iconColor : iconColor?.withValues(alpha: 0.5),

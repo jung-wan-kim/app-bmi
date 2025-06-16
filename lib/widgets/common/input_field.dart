@@ -211,7 +211,7 @@ class _InputFieldState extends State<InputField> {
         suffixText: widget.suffixText,
         suffixIcon: widget.obscureText
             ? IconButton(
-                icon:\1const Icon(
+                icon:const Icon(
                   _obscureText ? Icons.visibility : Icons.visibility_off,
                   color: theme.iconTheme.color?.withValues(alpha: 0.7),
                 ),
@@ -310,7 +310,7 @@ class NumericInputField extends StatelessWidget {
         onChanged(number);
       },
       suffixText: suffix,
-      prefixIcon: prefixIcon != null ?\1const Icon(prefixIcon) : null,
+      prefixIcon: prefixIcon != null ?const Icon(prefixIcon) : null,
       enabled: enabled,
       semanticLabel: semanticLabel,
     );

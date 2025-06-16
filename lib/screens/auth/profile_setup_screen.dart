@@ -80,7 +80,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:\1const Text(프로필 저장 실패: $error'),
+            content:const Text('프로필 저장 실패: $error'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -107,7 +107,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
+                const Text('
                   '기본 정보를 입력해주세요',
                   style: TextStyle(
                     fontSize: 24,
@@ -116,7 +116,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                const Text('
                   'BMI 계산과 목표 설정을 위해 필요합니다',
                   style: TextStyle(
                     fontSize: 16,
@@ -126,7 +126,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                 const SizedBox(height: 32),
                 
                 // Gender Selection
-                const Text(
+                const Text('
                   '성별',
                   style: TextStyle(
                     fontSize: 16,
@@ -159,7 +159,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                 const SizedBox(height: 24),
                 
                 // Date of Birth
-                const Text(
+                const Text('
                   '생년월일',
                   style: TextStyle(
                     fontSize: 16,
@@ -204,7 +204,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                 const SizedBox(height: 24),
                 
                 // Height Input
-                const Text(
+                const Text('
                   '키 (cm)',
                   style: TextStyle(
                     fontSize: 16,
@@ -248,7 +248,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                 const SizedBox(height: 24),
                 
                 // Target Weight Input
-                const Text(
+                const Text('
                   '목표 체중 (kg)',
                   style: TextStyle(
                     fontSize: 16,
@@ -304,7 +304,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  child: const Text('
                     '프로필 저장',
                     style: TextStyle(
                       fontSize: 18,
@@ -351,7 +351,7 @@ class _GenderCard extends StatelessWidget {
           ),
         ),
         child: Column(
-          children: [\1const Icon(
+          children: [const Icon(
               icon,
               size: 40,
               color: isSelected ? AppColors.primary : AppColors.textSecondary,

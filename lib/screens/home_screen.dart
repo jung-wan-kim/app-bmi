@@ -133,7 +133,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
                   ),
                   child: Row(
-                    children: [\1const Icon(Icons.info_outline, color: AppColors.warning, size: 16),
+                    children: [const Icon(Icons.info_outline, color: AppColors.warning, size: 16),
                       const SizedBox(width: 8),
                       Text(
                         '데모 모드로 실행 중입니다',
@@ -178,7 +178,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                             child: Row(
                               children: [
-              \1const Icon(
+              const Icon(
                                   isOnline ? Icons.cloud_queue : Icons.cloud_off,
                                   color: isOnline ? AppColors.warning : AppColors.error,
                                   size: 16,
@@ -222,7 +222,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                             child: Row(
                               children: [
-                        \1const Icon(
+                        const Icon(
                                   Icons.sync,
                                   color: AppColors.success,
                                   size: 16,
@@ -306,7 +306,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            const Text('
                               '현재 체중',
                               style: TextStyle(
                                 color: Colors.white70,
@@ -392,7 +392,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    const Text('
                       'BMI 상태',
                       style: TextStyle(
                         fontSize: 16,
@@ -426,7 +426,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         border: Border.all(color: AppColors.border),
                       ),
                       child: Column(
-                        children: [\1const Icon(
+                        children: [const Icon(
                             Icons.flag_outlined,
                             size: 48,
                             color: AppColors.textSecondary.withValues(alpha: 0.5),
@@ -467,7 +467,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                const Text('
                                   '목표 진행 상황',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -486,7 +486,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                             IconButton(
                               onPressed: () => context.push('/home/goal-setting'),
-                              icon: const\1const Icon(Icons.edit_outlined),
+                              icon: const Icon(Icons.edit_outlined),
                               tooltip: '목표 수정',
                             ),
                           ],
@@ -562,19 +562,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           labelType: NavigationRailLabelType.all,
           destinations: const [
             NavigationRailDestination(
-              icon:\1const Icon(Icons.home_outlined),
-              selectedIcon:\1const Icon(Icons.home),
-              label:\1const Text(홈'),
+              icon:const Icon(Icons.home_outlined),
+              selectedIcon:const Icon(Icons.home),
+              label:const Text('홈'),
             ),
             NavigationRailDestination(
-              icon:\1const Icon(Icons.bar_chart_outlined),
+              icon:const Icon(Icons.bar_chart_outlined),
               selectedIcon: Icon(Icons.bar_chart),
-              label:\1const Text(통계'),
+              label:const Text('통계'),
             ),
             NavigationRailDestination(
-              icon:\1const Icon(Icons.person_outline),
+              icon:const Icon(Icons.person_outline),
               selectedIcon: Icon(Icons.person),
-              label:\1const Text(프로필'),
+              label:const Text('프로필'),
             ),
           ],
         ),
@@ -599,7 +599,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
                     ),
                     child: Row(
-                      children: [\1const Icon(Icons.info_outline, color: AppColors.warning, size: 16),
+                      children: [const Icon(Icons.info_outline, color: AppColors.warning, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           '데모 모드로 실행 중입니다',
@@ -644,7 +644,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                               child: Row(
                                 children: [
-                         \1const Icon(
+                         const Icon(
                                     isOnline ? Icons.cloud_queue : Icons.cloud_off,
                                     color: isOnline ? AppColors.warning : AppColors.error,
                                     size: 16,
@@ -667,7 +667,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       onPressed: () async {
                                         await ref.read(offlineSupportProvider.notifier).processQueueManually();
                                       },
-                                      child: const\1const Text(동기화', style: TextStyle(fontSize: 12)),
+                                      child: const Text('동기화', style: TextStyle(fontSize: 12)),
                                     ),
                                 ],
                               ),
@@ -688,7 +688,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                               child: Row(
                                 children: [
-                          \1const Icon(
+                          const Icon(
                                     Icons.sync,
                                     color: AppColors.success,
                                     size: 16,
@@ -791,7 +791,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              const Text(
+                                              const Text('
                                                 '현재 체중',
                                                 style: TextStyle(
                                                   color: Colors.white70,
@@ -882,7 +882,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    const Text('
                                       'BMI 상태',
                                       style: TextStyle(
                                         fontSize: 16,
@@ -925,7 +925,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         border: Border.all(color: AppColors.border),
                                       ),
                                       child: Column(
-                                        children: [\1const Icon(
+                                        children: [const Icon(
                                             Icons.flag_outlined,
                                             size: 48,
                                             color: AppColors.textSecondary.withValues(alpha: 0.5),
@@ -941,7 +941,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           const SizedBox(height: 16),
                                           OutlinedButton(
                                             onPressed: () => context.push('/home/goal-setting'),
-                                            child: const\1const Text(목표 설정하기'),
+                                            child: const Text('목표 설정하기'),
                                           ),
                                         ],
                                       ),
@@ -966,7 +966,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                const Text(
+                                                const Text('
                                                   '목표 진행 상황',
                                                   style: TextStyle(
                                                     fontSize: 16,
@@ -985,7 +985,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             ),
                                             IconButton(
                                               onPressed: () => context.push('/home/goal-setting'),
-                                              icon: const\1const Icon(Icons.edit_outlined),
+                                              icon: const Icon(Icons.edit_outlined),
                                               tooltip: '목표 수정',
                                             ),
                                           ],
@@ -1067,17 +1067,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       },
       items: const [
         BottomNavigationBarItem(
-          icon:\1const Icon(Icons.home_outlined),
-          activeIcon:\1const Icon(Icons.home),
+          icon:const Icon(Icons.home_outlined),
+          activeIcon:const Icon(Icons.home),
           label: '홈',
         ),
         BottomNavigationBarItem(
-          icon:\1const Icon(Icons.bar_chart_outlined),
-          activeIcon:\1const Icon(Icons.bar_chart),
+          icon:const Icon(Icons.bar_chart_outlined),
+          activeIcon:const Icon(Icons.bar_chart),
           label: '통계',
         ),
         BottomNavigationBarItem(
-          icon:\1const Icon(Icons.person_outline),
+          icon:const Icon(Icons.person_outline),
           activeIcon: Icon(Icons.person),
           label: '프로필',
         ),

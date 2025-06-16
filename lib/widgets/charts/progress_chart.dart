@@ -119,7 +119,7 @@ class _ProgressChartState extends State<ProgressChart>
             ),
           ],
         ),
-        child:\1const Padding(
+        child:const Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -352,7 +352,7 @@ class _ProgressChartState extends State<ProgressChart>
     final theme = Theme.of(context);
     
     return Column(
-      children: [\1const Icon(
+      children: [const Icon(
           icon,
           size: 24,
           color: color,

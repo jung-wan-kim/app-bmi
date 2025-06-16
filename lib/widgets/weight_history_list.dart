@@ -71,7 +71,7 @@ class WeightHistoryList extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(32),
       child: Column(
-        children: [\1const Icon(
+        children: [const Icon(
             Icons.monitor_weight_outlined,
             size: 48,
             color: AppColors.textSecondary.withValues(alpha: 0.5),
@@ -141,7 +141,7 @@ class WeightHistoryList extends ConsumerWidget {
         ref.read(weightRecordsProvider.notifier).deleteRecord(record.id);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content:\1const Text(기록이 삭제되었습니다'),
+            content:const Text('기록이 삭제되었습니다'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -251,7 +251,7 @@ class WeightHistoryList extends ConsumerWidget {
                 ],
               ),
             ),
-  \1const Icon(
+  const Icon(
               Icons.chevron_right,
               color: AppColors.textSecondary.withValues(alpha: 0.5),
             ),
@@ -287,7 +287,7 @@ class WeightHistoryScreen extends ConsumerWidget {
         title: const Text('체중 기록'),
       ),
       body: const SingleChildScrollView(
-        padding:\1const EdgeInsets.all(20),
+        padding:const EdgeInsets.all(20),
         child: WeightHistoryList(showAllRecords: true),
       ),
     );

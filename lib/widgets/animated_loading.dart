@@ -57,7 +57,7 @@ class _AnimatedLoadingState extends State<AnimatedLoading>
 
   @override
   Widget build(BuildContext context) {
-    return\1const SizedBox(
+    returnconst SizedBox(
       width: widget.size,
       height: widget.size,
       child: AnimatedBuilder(

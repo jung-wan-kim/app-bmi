@@ -241,14 +241,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         child: _buildListTile(
                           title: '테마 모드',
                           subtitle: _getThemeModeText(themeMode),
-                          leading:\1const Icon(
+                          leading:const Icon(
                             themeMode == ThemeMode.dark 
                                 ? Icons.dark_mode 
                                 : themeMode == ThemeMode.light
                                     ? Icons.light_mode
                                     : Icons.brightness_auto,
                           ),
-                          trailing: const\1const Icon(Icons.chevron_right),
+                          trailing: const Icon(Icons.chevron_right),
                           onTap: () => _showThemeModeDialog(ref),
                         ),
                       );
@@ -270,8 +270,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       _buildListTile(
                         title: l10n?.language ?? '언어',
                         subtitle: locale.languageCode == 'ko' ? '한국어' : 'English',
-                        leading: const\1const Icon(Icons.language),
-                        trailing: const\1const Icon(Icons.chevron_right),
+                        leading: const Icon(Icons.language),
+                        trailing: const Icon(Icons.chevron_right),
                         onTap: () => _showLanguageDialog(ref),
                       ),
                     ],
@@ -288,7 +288,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   _buildListTile(
                     title: '체중 단위',
                     subtitle: _selectedWeightUnit,
-                    trailing: const\1const Icon(Icons.chevron_right),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () async {
                       final selected = await _showUnitDialog(
                         title: '체중 단위 선택',
@@ -305,7 +305,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   _buildListTile(
                     title: '키 단위',
                     subtitle: _selectedHeightUnit,
-                    trailing: const\1const Icon(Icons.chevron_right),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () async {
                       final selected = await _showUnitDialog(
                         title: '키 단위 선택',
@@ -339,7 +339,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         _buildListTile(
                           title: '동기화',
                           subtitle: _getSyncStatusText(lastSyncTime, isSyncing, syncError),
-                          leading:\1const Icon(
+                          leading:const Icon(
                             isSyncing 
                                 ? Icons.sync 
                                 : (syncError != null 
@@ -357,7 +357,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                   height: 20,
                                   child: CircularProgressIndicator(strokeWidth: 2),
                                 )
-                              : const\1const Icon(Icons.chevron_right),
+                              : const Icon(Icons.chevron_right),
                           onTap: isSyncing ? null : () => _performSync(ref),
                         ),
                         if (syncError != null) ...[
@@ -370,7 +370,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
                             ),
                             child: Row(
-                              children: [\1const Icon(Icons.error_outline, color: AppColors.error, size: 20),
+                              children: [const Icon(Icons.error_outline, color: AppColors.error, size: 20),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
@@ -403,21 +403,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   _buildListTile(
                     title: '데이터 백업',
                     subtitle: '현재 데이터를 파일로 저장합니다',
-                    leading: const\1const Icon(Icons.backup_outlined),
+                    leading: const Icon(Icons.backup_outlined),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: _createBackup,
                   ),
                   _buildListTile(
                     title: '데이터 복원',
                     subtitle: '백업 파일에서 데이터를 복원합니다',
-                    leading: const\1const Icon(Icons.restore_outlined),
+                    leading: const Icon(Icons.restore_outlined),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: _restoreBackup,
                   ),
                   _buildListTile(
                     title: '백업 파일 관리',
                     subtitle: '저장된 백업 파일을 관리합니다',
-                    leading: const\1const Icon(Icons.folder_outlined),
+                    leading: const Icon(Icons.folder_outlined),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: _manageBackupFiles,
                   ),
@@ -425,7 +425,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   _buildListTile(
                     title: '데이터 초기화',
                     subtitle: '모든 데이터를 삭제합니다',
-                    leading: const\1const Icon(Icons.delete_forever_outlined, color: AppColors.error),
+                    leading: const Icon(Icons.delete_forever_outlined, color: AppColors.error),
                     onTap: _clearAllData,
                   ),
                 ],
@@ -440,11 +440,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   _buildListTile(
                     title: '버전',
                     subtitle: '1.0.0',
-                    leading: const\1const Icon(Icons.info_outline),
+                    leading: const Icon(Icons.info_outline),
                   ),
                   _buildListTile(
                     title: '개인정보 처리방침',
-                    leading: const\1const Icon(Icons.privacy_tip_outlined),
+                    leading: const Icon(Icons.privacy_tip_outlined),
                     trailing: const Icon(Icons.open_in_new),
                     onTap: () {
                       // TODO: 개인정보 처리방침
@@ -452,7 +452,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                   _buildListTile(
                     title: '이용약관',
-                    leading: const\1const\1const Icon(Icons.description_outlined),
+                    leading: constconst Icon(Icons.description_outlined),
                     trailing: const Icon(Icons.open_in_new),
                     onTap: () {
                       // TODO: 이용약관
@@ -474,7 +474,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  leading: const\1const Icon(
+                  leading: const Icon(
                     Icons.logout,
                     color: AppColors.error,
                   ),
@@ -498,7 +498,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       color: AppColors.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [\1const Padding(
+        children: [const Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
             child: Text(
               title,
@@ -614,7 +614,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       onChanged: (value) {
                         setState(() => selectedGender = value!);
                       },
-                      contentPadding:\1const EdgeInsets.zero,
+                      contentPadding:const EdgeInsets.zero,
                     ),
                   ),
                   Expanded(
@@ -625,7 +625,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       onChanged: (value) {
                         setState(() => selectedGender = value!);
                       },
-                      contentPadding:\1const EdgeInsets.zero,
+                      contentPadding:const EdgeInsets.zero,
                     ),
                   ),
                 ],
@@ -821,7 +821,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       if (syncState.lastResult?.success == true && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:\1const Text(동기화가 완료되었습니다\n${syncState.lastResult.toString()}'),
+            content:const Text('동기화가 완료되었습니다\n${syncState.lastResult.toString()}'),
             backgroundColor: AppColors.success,
           ),
         );
@@ -830,7 +830,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:\1const Text(동기화 실패: $e'),
+            content:const Text('동기화 실패: $e'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -849,7 +849,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       barrierDismissible: false,
       builder: (context) => const AlertDialog(
         content: Row(
-          children: [\1const CircularProgressIndicator(),\1const SizedBox(width: 20),
+          children: [const CircularProgressIndicator(),const SizedBox(width: 20),
             Text('백업 생성 중...'),
           ],
         ),
@@ -866,7 +866,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       final shouldShare = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const\1const Text(백업 완료'),
+          title: const Text('백업 완료'),
           content: Text(
             '백업이 성공적으로 생성되었습니다.\n'
             '파일명: ${result.fileName}\n'
@@ -876,11 +876,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const\1const Text(나중에'),
+              child: const Text('나중에'),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const\1const Text(공유'),
+              child: const Text('공유'),
             ),
           ],
         ),
@@ -894,12 +894,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const\1const Text(백업 실패'),
+          title: const Text('백업 실패'),
           content: Text('백업 생성 중 오류가 발생했습니다.\n${result.error}'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const\1const Text(확인'),
+              child: const Text('확인'),
             ),
           ],
         ),
@@ -912,7 +912,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final shouldRestore = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const\1const Text(데이터 복원'),
+        title: const Text('데이터 복원'),
         content: const Text(
           '백업 파일에서 데이터를 복원하면 현재 데이터가 모두 교체됩니다.\n'
           '계속하시겠습니까?',
@@ -920,7 +920,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const\1const Text(취소'),
+            child: const Text('취소'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
@@ -949,8 +949,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       builder: (context) => const AlertDialog(
         content: Row(
           children: [
-    \1const CircularProgressIndicator(),
-    \1const SizedBox(width: 20),\1const Text(데이터 복원 중...'),
+    const CircularProgressIndicator(),
+    const SizedBox(width: 20),const Text('데이터 복원 중...'),
           ],
         ),
       ),
@@ -974,7 +974,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const\1const Text(복원 완료'),
+          title: const Text('복원 완료'),
           content: Text(
             '데이터가 성공적으로 복원되었습니다.\n'
             '복원된 기록: ${result.recordCount}개\n'
@@ -983,7 +983,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const\1const Text(확인'),
+              child: const Text('확인'),
             ),
           ],
         ),
@@ -993,12 +993,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const\1const Text(복원 실패'),
-          content:\1const Text(데이터 복원 중 오류가 발생했습니다.\n${result.error}'),
+          title: const Text('복원 실패'),
+          content:const Text('데이터 복원 중 오류가 발생했습니다.\n${result.error}'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const\1const Text(확인'),
+              child: const Text('확인'),
             ),
           ],
         ),
@@ -1015,13 +1015,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) => Container(
-        padding: const\1const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-  \1const Padding(
-              padding: const\1const EdgeInsets.symmetric(horizontal: 20),
+  const Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 '백업 파일 관리',
                 style: Theme.of(context).textTheme.titleLarge,
@@ -1032,7 +1032,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               const Padding(
                 padding: EdgeInsets.all(40),
                 child: Center(
-                  child:\1const Text(저장된 백업 파일이 없습니다'),
+                  child:const Text('저장된 백업 파일이 없습니다'),
                 ),
               )
             else
@@ -1057,12 +1057,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               final shouldDelete = await showDialog<bool>(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: const\1const Text(백업 삭제'),
-                                  content:\1const Text(${file.fileName}을(를) 삭제하시겠습니까?'),
+                                  title: const Text('백업 삭제'),
+                                  content:const Text('${file.fileName}을(를) 삭제하시겠습니까?'),
                                   actions: [
                                     TextButton(
                                       onPressed: () => Navigator.pop(context, false),
-                                      child: const\1const Text(취소'),
+                                      child: const Text('취소'),
                                     ),
                                     TextButton(
                                       onPressed: () => Navigator.pop(context, true),
@@ -1089,8 +1089,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           const PopupMenuItem(
                             value: 'share',
                             child: Row(
-                              children: [\1const Icon(Icons.share_outlined, size: 20),
-    \1const SizedBox(width: 8),
+                              children: [const Icon(Icons.share_outlined, size: 20),
+    const SizedBox(width: 8),
                                 Text('공유'),
                               ],
                             ),
@@ -1098,8 +1098,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           const PopupMenuItem(
                             value: 'delete',
                             child: Row(
-                              children: [\1const Icon(Icons.delete_outline, size: 20, color: AppColors.error),
-                        \1const SizedBox(width: 8),
+                              children: [const Icon(Icons.delete_outline, size: 20, color: AppColors.error),
+                        const SizedBox(width: 8),
                                 Text('삭제', style: TextStyle(color: AppColors.error)),
                               ],
                             ),
@@ -1134,13 +1134,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const\1const Text(테마 모드 선택'),
+        title: const Text('테마 모드 선택'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             RadioListTile<ThemeMode>(
-              title: const\1const Text(라이트 모드'),
-              subtitle: const\1const Text(밝은 테마 사용'),
+              title: const Text('라이트 모드'),
+              subtitle: const Text('밝은 테마 사용'),
               value: ThemeMode.light,
               groupValue: currentMode,
               onChanged: (value) {
@@ -1149,8 +1149,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               },
             ),
             RadioListTile<ThemeMode>(
-              title: const\1const Text(다크 모드'),
-              subtitle: const\1const Text(어두운 테마 사용'),
+              title: const Text('다크 모드'),
+              subtitle: const Text('어두운 테마 사용'),
               value: ThemeMode.dark,
               groupValue: currentMode,
               onChanged: (value) {
@@ -1159,8 +1159,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               },
             ),
             RadioListTile<ThemeMode>(
-              title: const\1const Text(시스템 설정 따름'),
-              subtitle: const\1const Text(기기 설정에 따라 자동 전환'),
+              title: const Text('시스템 설정 따름'),
+              subtitle: const Text('기기 설정에 따라 자동 전환'),
               value: ThemeMode.system,
               groupValue: currentMode,
               onChanged: (value) {
@@ -1186,7 +1186,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             RadioListTile<String>(
-              title: const\1const Text(한국어'),
+              title: const Text('한국어'),
               value: 'ko',
               groupValue: currentLocale.languageCode,
               onChanged: (value) {
@@ -1197,7 +1197,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               },
             ),
             RadioListTile<String>(
-              title: const\1const Text(English'),
+              title: const Text('English'),
               value: 'en',
               groupValue: currentLocale.languageCode,
               onChanged: (value) {
@@ -1226,21 +1226,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 // 프로필 카드
                 Card(
-                  margin: const\1const EdgeInsets.only(bottom: 16),
+                  margin: const EdgeInsets.only(bottom: 16),
                   child: Padding(
-                    padding: const\1const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
                         CircleAvatar(
                           radius: 60,
                           backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                          child: const\1const Icon(
+                          child: const Icon(
                             Icons.person,
                             size: 60,
                             color: AppColors.primary,
                           ),
                         ),
-                        const\1const SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           _userName,
                           style: const TextStyle(
@@ -1259,7 +1259,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         const SizedBox(height: 16),
                         OutlinedButton.icon(
                           onPressed: _editProfile,
-                          icon: const\1const Icon(Icons.edit_outlined),
+                          icon: const Icon(Icons.edit_outlined),
                           label: Text(localizations?.editProfile ?? '프로필 편집'),
                         ),
                       ],
@@ -1286,13 +1286,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           _buildListTile(
                             title: localizations?.notificationTime ?? '알림 시간',
                             subtitle: notificationSettings.reminderTime.format(),
-                            trailing: const\1const Icon(Icons.chevron_right),
+                            trailing: const Icon(Icons.chevron_right),
                             onTap: () => _selectNotificationTime(ref),
                           ),
                           _buildListTile(
                             title: localizations?.notificationDays ?? '알림 요일',
                             subtitle: _getSelectedDaysText(notificationSettings.selectedDays),
-                            trailing: const\1const Icon(Icons.chevron_right),
+                            trailing: const Icon(Icons.chevron_right),
                             onTap: () => _selectNotificationDays(ref),
                           ),
                         ],
@@ -1311,7 +1311,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         return _buildListTile(
                           title: localizations?.theme ?? '테마',
                           subtitle: _getThemeModeText(themeMode),
-                          trailing: const\1const Icon(Icons.chevron_right),
+                          trailing: const Icon(Icons.chevron_right),
                           onTap: () => _showThemeModeDialog(ref),
                         );
                       },
@@ -1322,7 +1322,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         return _buildListTile(
                           title: localizations?.language ?? '언어',
                           subtitle: locale.languageCode == 'ko' ? '한국어' : 'English',
-                          trailing: const\1const Icon(Icons.chevron_right),
+                          trailing: const Icon(Icons.chevron_right),
                           onTap: () => _showLanguageDialog(ref),
                         );
                       },
@@ -1389,19 +1389,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     _buildListTile(
                       title: localizations?.createBackup ?? '백업 생성',
                       subtitle: localizations?.createBackupSubtitle ?? '현재 데이터를 파일로 저장',
-                      leading: const\1const Icon(Icons.backup_outlined),
+                      leading: const Icon(Icons.backup_outlined),
                       onTap: _createBackup,
                     ),
                     _buildListTile(
                       title: localizations?.restoreBackup ?? '데이터 복원',
                       subtitle: localizations?.restoreBackupSubtitle ?? '백업 파일에서 데이터 복원',
-                      leading: const\1const Icon(Icons.restore_outlined),
+                      leading: const Icon(Icons.restore_outlined),
                       onTap: _restoreBackup,
                     ),
                     _buildListTile(
                       title: localizations?.manageBackups ?? '백업 파일 관리',
                       subtitle: localizations?.manageBackupsSubtitle ?? '저장된 백업 파일 보기',
-                      leading: const\1const Icon(Icons.folder_outlined),
+                      leading: const Icon(Icons.folder_outlined),
                       onTap: _manageBackupFiles,
                     ),
                   ],
@@ -1414,7 +1414,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     _buildListTile(
                       title: localizations?.clearAllData ?? '모든 데이터 초기화',
                       subtitle: localizations?.clearAllDataSubtitle ?? '모든 체중 기록과 목표 삭제',
-                      leading: const\1const Icon(Icons.delete_forever_outlined, color: AppColors.error),
+                      leading: const Icon(Icons.delete_forever_outlined, color: AppColors.error),
                       titleStyle: const TextStyle(color: AppColors.error),
                       onTap: _clearAllData,
                     ),
@@ -1431,14 +1431,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                     _buildListTile(
                       title: localizations?.privacyPolicy ?? '개인정보 처리방침',
-                      trailing: const\1const Icon(Icons.chevron_right),
+                      trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         // TODO: 개인정보 처리방침 페이지로 이동
                       },
                     ),
                     _buildListTile(
                       title: localizations?.termsOfService ?? '이용약관',
-                      trailing: const\1const Icon(Icons.chevron_right),
+                      trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         // TODO: 이용약관 페이지로 이동
                       },
@@ -1447,12 +1447,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 
                 // 로그아웃 버튼
-                const\1const SizedBox(height: 24),
-          \1const SizedBox(
+                const SizedBox(height: 24),
+          const SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: _signOut,
-                    icon: const\1const Icon(Icons.logout, color: AppColors.error),
+                    icon: const Icon(Icons.logout, color: AppColors.error),
                     label: Text(
                       _isDemoMode 
                           ? localizations?.exitDemoMode ?? '데모 모드 종료'
@@ -1460,7 +1460,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       style: const TextStyle(color: AppColors.error),
                     ),
                     style: OutlinedButton.styleFrom(
-                      padding: const\1const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       side: const BorderSide(color: AppColors.error),
                     ),
                   ),

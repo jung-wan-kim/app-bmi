@@ -71,11 +71,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             // Skip 버튼
             Align(
               alignment: Alignment.topRight,
-              child:\1const Padding(
+              child:const Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
                   onPressed: _completeOnboarding,
-                  child: const Text(
+                  child: const Text('
                     '건너뛰기',
                     style: TextStyle(fontSize: 16),
                   ),
@@ -95,7 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             
-            // 인디케이터와 버튼\1const Padding(
+            // 인디케이터와 버튼const Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
@@ -120,7 +120,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   const SizedBox(height: 32),
                   
-                  // 액션 버튼\1const SizedBox(
+                  // 액션 버튼const SizedBox(
                     width: double.infinity,
                     child: _currentPage == _pages.length - 1
                         ? ElevatedButton(
@@ -157,7 +157,7 @@ class OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return\1const Padding(
+    returnconst Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -167,7 +167,7 @@ class OnboardingPage extends StatelessWidget {
             height: 200,
             child: _buildAnimation(context),
           ),
-          const\1const SizedBox(height: 48),
+          const SizedBox(height: 48),
           
           // 타이틀
           Text(
@@ -212,7 +212,7 @@ class OnboardingPage extends StatelessWidget {
             builder: (context, value, child) {
               return Transform.scale(
                 scale: value,
-                child:\1const Icon(
+                child:const Icon(
                   data.iconFallback,
                   size: 100,
                   color: AppColors.primary,

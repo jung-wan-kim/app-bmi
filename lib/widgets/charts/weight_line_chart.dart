@@ -60,7 +60,7 @@ class WeightLineChart extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context),
-            const SizedBox(height: 24),\1const SizedBox(
+            const SizedBox(height: 24),const SizedBox(
               height: 250,
               child: LineChart(
                 _buildChartData(
@@ -102,7 +102,7 @@ class WeightLineChart extends StatelessWidget {
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [\1const Icon(
+          children: [const Icon(
               Icons.show_chart,
               size: 64,
               color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.3),
@@ -343,7 +343,7 @@ class WeightLineChart extends StatelessWidget {
                 return const SizedBox.shrink();
               }
               final date = sortedRecords[index].recordedAt;
-              return\1const Padding(
+              returnconst Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   _formatDate(date),

@@ -134,7 +134,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
           // 성공 메시지 표시
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content:\1const Text(체중이 기록되었습니다'),
+              content:const Text('체중이 기록되었습니다'),
               backgroundColor: AppColors.success,
             ),
           );
@@ -146,7 +146,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content:\1const Text(오류가 발생했습니다: $e'),
+              content:const Text('오류가 발생했습니다: $e'),
               backgroundColor: AppColors.error,
             ),
           );
@@ -169,14 +169,14 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
     return Scaffold(
       backgroundColor: isDarkMode ? AppColors.backgroundDark : AppColors.background,
       appBar: AppBar(
-        title: const\1const Text(체중 기록'),
+        title: const Text('체중 기록'),
         actions: [
           Semantics(
             button: true,
             label: AppAccessibility.semanticLabels['saveWeight'],
             child: TextButton(
               onPressed: _saveWeight,
-              child: const Text(
+              child: const Text('
                 '저장',
                 style: TextStyle(
                   fontSize: 16,
@@ -401,7 +401,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
                           strokeWidth: 2,
                         ),
                       )
-                    : const\1const Text(체중 기록하기'),
+                    : const Text('체중 기록하기'),
                 ),
               ],
             ),

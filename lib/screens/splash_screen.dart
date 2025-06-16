@@ -113,7 +113,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const Text(
+                    const Text('
                       AppConstants.appName,
                       style: TextStyle(
                         fontSize: 32,
@@ -122,7 +122,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    const Text('
                       '건강한 체중 관리의 시작',
                       style: TextStyle(
                         fontSize: 16,

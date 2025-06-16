@@ -147,7 +147,7 @@ class _AdvancedBMICharacterState extends State<AdvancedBMICharacter>
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [\1const Icon(
+                    children: [const Icon(
                         _getCategoryIcon(category),
                         color: Colors.white,
                         size: 18,

@@ -63,7 +63,7 @@ class ResponsiveUtils {
   
   // 반응형 패딩
   static EdgeInsets getResponsivePadding(BuildContext context) {
-    return\1const EdgeInsets.all(
+    return EdgeInsets.all(
       getResponsiveValue(
         context: context,
         mobile: 16,
@@ -183,7 +183,7 @@ class ResponsiveGrid extends StatelessWidget {
           spacing: spacing,
           runSpacing: runSpacing,
           children: children.map((child) {
-            return\1const SizedBox(
+            return SizedBox(
               width: itemWidth,
               child: child,
             );
