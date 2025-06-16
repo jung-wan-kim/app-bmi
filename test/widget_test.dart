@@ -7,21 +7,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:app_forge/main.dart';
 
 void main() {
-  testWidgets('App Forge loads correctly', (WidgetTester tester) async {
+  testWidgets('BMI Tracker app starts', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const AppForge());
+    await tester.pumpWidget(
+      const ProviderScope(
+        child: BMITrackerApp(),
+      ),
+    );
 
-    // Verify that App Forge title is displayed
-    expect(find.text('App Forge'), findsNWidgets(2)); // AppBar and body
-    
-    // Verify that the description is displayed
-    expect(find.text('Build mobile apps from Figma designs with AI'), findsOneWidget);
-    
-    // Verify the build icon is displayed
-    expect(find.byIcon(Icons.build_rounded), findsOneWidget);
+    // Wait for the app to initialize
+    await tester.pumpAndSettle();
+
+    // Verify that the app starts
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

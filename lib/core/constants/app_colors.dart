@@ -18,13 +18,21 @@ class AppColors {
   static const Color error = Color(0xFFEF4444);
   static const Color info = Color(0xFF3B82F6);
   
-  // Neutral Colors
+  // Light Theme Colors
   static const Color background = Color(0xFFF9FAFB);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color textPrimary = Color(0xFF111827);
   static const Color textSecondary = Color(0xFF6B7280);
   static const Color textDisabled = Color(0xFF9CA3AF);
   static const Color border = Color(0xFFE5E7EB);
+  
+  // Dark Theme Colors
+  static const Color backgroundDark = Color(0xFF0F0F0F);
+  static const Color surfaceDark = Color(0xFF1A1A1A);
+  static const Color textPrimaryDark = Color(0xFFF9FAFB);
+  static const Color textSecondaryDark = Color(0xFFD1D5DB);
+  static const Color textDisabledDark = Color(0xFF6B7280);
+  static const Color borderDark = Color(0xFF374151);
   
   // BMI Colors
   static const Color bmiUnderweight = Color(0xFF3B82F6); // Blue
@@ -40,4 +48,5 @@ class AppColors {
   
   // Shadow
   static const Color shadowColor = Color(0x1A000000);
+  static const Color shadowColorDark = Color(0x33FFFFFF);
 }

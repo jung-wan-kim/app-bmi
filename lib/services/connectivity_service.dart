@@ -27,7 +27,9 @@ class ConnectivityService {
     await checkConnection();
     
     // 연결 상태 변화 리스닝
-    _connectivity.onConnectivityChanged.listen((ConnectivityResult result) async {
+    _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> results) async {
+      // 여러 연결 중 하나라도 있으면 연결된 것으로 처리
+      final result = results.isNotEmpty ? results.first : ConnectivityResult.none;
       await _handleConnectivityChange(result);
     });
     

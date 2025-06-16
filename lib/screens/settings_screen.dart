@@ -9,7 +9,12 @@ import '../providers/notification_settings_provider.dart';
 import '../providers/weight_records_provider.dart';
 import '../providers/goal_provider.dart';
 import '../providers/sync_provider.dart';
+import '../providers/theme_provider.dart';
+import '../providers/locale_provider.dart';
 import '../services/backup_restore_service.dart';
+import '../core/constants/app_accessibility.dart';
+import '../l10n/app_localizations.dart';
+import '../core/utils/responsive_utils.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -117,61 +122,73 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(isDarkModeProvider);
+    final localizations = AppLocalizations.of(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
+    
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDarkMode ? AppColors.backgroundDark : AppColors.background,
       appBar: AppBar(
-        title: const Text('설정'),
+        title: Text(localizations?.settings ?? '설정'),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 프로필 섹션
-              Container(
-                padding: const EdgeInsets.all(20),
-                color: AppColors.surface,
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: AppColors.primary.withOpacity(0.1),
-                      child: const Icon(
-                        Icons.person,
-                        size: 40,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _userName,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _isDemoMode ? '데모 모드' : _userEmail,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: _editProfile,
-                      icon: const Icon(Icons.edit_outlined),
-                    ),
-                  ],
+        child: isTablet
+            ? _buildTabletLayout(context, isDarkMode, localizations)
+            : _buildMobileLayout(context, isDarkMode, localizations),
+      ),
+    );
+  }
+  
+  Widget _buildMobileLayout(BuildContext context, bool isDarkMode, AppLocalizations? localizations) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 프로필 섹션
+          Container(
+            padding: const EdgeInsets.all(20),
+            color: isDarkMode ? AppColors.surfaceDark : AppColors.surface,
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  child: const Icon(
+                    Icons.person,
+                    size: 40,
+                    color: AppColors.primary,
+                  ),
                 ),
-              ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _userName,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _isDemoMode ? localizations?.demoMode ?? '데모 모드' : _userEmail,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: isDarkMode ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  onPressed: _editProfile,
+                  icon: const Icon(Icons.edit_outlined),
+                ),
+              ],
+            ),
+          ),
               
               const SizedBox(height: 8),
               
@@ -204,6 +221,59 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           onTap: () => _selectNotificationDays(ref),
                         ),
                       ],
+                    ],
+                  );
+                },
+              ),
+              
+              const SizedBox(height: 8),
+              
+              // 테마 설정
+              _buildSection(
+                title: '테마 설정',
+                children: [
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final themeMode = ref.watch(themeModeProvider);
+                      return Semantics(
+                        label: AppAccessibility.semanticLabels['themeToggle'],
+                        hint: '현재 ${_getThemeModeText(themeMode)}',
+                        child: _buildListTile(
+                          title: '테마 모드',
+                          subtitle: _getThemeModeText(themeMode),
+                          leading: Icon(
+                            themeMode == ThemeMode.dark 
+                                ? Icons.dark_mode 
+                                : themeMode == ThemeMode.light
+                                    ? Icons.light_mode
+                                    : Icons.brightness_auto,
+                          ),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () => _showThemeModeDialog(ref),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              
+              const SizedBox(height: 8),
+              
+              // 언어 설정
+              Consumer(
+                builder: (context, ref, child) {
+                  final locale = ref.watch(localeProvider);
+                  final l10n = AppLocalizations.of(context);
+                  return _buildSection(
+                    title: l10n?.language ?? '언어',
+                    children: [
+                      _buildListTile(
+                        title: l10n?.language ?? '언어',
+                        subtitle: locale.languageCode == 'ko' ? '한국어' : 'English',
+                        leading: const Icon(Icons.language),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => _showLanguageDialog(ref),
+                      ),
                     ],
                   );
                 },
@@ -1051,6 +1121,363 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ],
         ),
       ),
+    );
+  }
+  
+  String _getThemeModeText(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return '라이트 모드';
+      case ThemeMode.dark:
+        return '다크 모드';
+      case ThemeMode.system:
+        return '시스템 설정 따름';
+    }
+  }
+  
+  Future<void> _showThemeModeDialog(WidgetRef ref) async {
+    final currentMode = ref.read(themeModeProvider);
+    
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('테마 모드 선택'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<ThemeMode>(
+              title: const Text('라이트 모드'),
+              subtitle: const Text('밝은 테마 사용'),
+              value: ThemeMode.light,
+              groupValue: currentMode,
+              onChanged: (value) {
+                ref.read(themeModeProvider.notifier).setThemeMode(value!);
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: const Text('다크 모드'),
+              subtitle: const Text('어두운 테마 사용'),
+              value: ThemeMode.dark,
+              groupValue: currentMode,
+              onChanged: (value) {
+                ref.read(themeModeProvider.notifier).setThemeMode(value!);
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: const Text('시스템 설정 따름'),
+              subtitle: const Text('기기 설정에 따라 자동 전환'),
+              value: ThemeMode.system,
+              groupValue: currentMode,
+              onChanged: (value) {
+                ref.read(themeModeProvider.notifier).setThemeMode(value!);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Future<void> _showLanguageDialog(WidgetRef ref) async {
+    final currentLocale = ref.read(localeProvider);
+    final l10n = AppLocalizations.of(context);
+    
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n?.language ?? '언어 선택'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<String>(
+              title: const Text('한국어'),
+              value: 'ko',
+              groupValue: currentLocale.languageCode,
+              onChanged: (value) {
+                ref.read(localeProvider.notifier).setLocale(
+                  const Locale('ko', 'KR'),
+                );
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile<String>(
+              title: const Text('English'),
+              value: 'en',
+              groupValue: currentLocale.languageCode,
+              onChanged: (value) {
+                ref.read(localeProvider.notifier).setLocale(
+                  const Locale('en', 'US'),
+                );
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildTabletLayout(BuildContext context, bool isDarkMode, AppLocalizations? localizations) {
+    return Row(
+      children: [
+        // 왼쪽: 프로필 및 기본 설정
+        Expanded(
+          flex: 1,
+          child: SingleChildScrollView(
+            padding: ResponsiveUtils.getResponsivePadding(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 프로필 카드
+                Card(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundColor: AppColors.primary.withOpacity(0.1),
+                          child: const Icon(
+                            Icons.person,
+                            size: 60,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          _userName,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _isDemoMode ? localizations?.demoMode ?? '데모 모드' : _userEmail,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: isDarkMode ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        OutlinedButton.icon(
+                          onPressed: _editProfile,
+                          icon: const Icon(Icons.edit_outlined),
+                          label: Text(localizations?.editProfile ?? '프로필 편집'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                
+                // 알림 설정
+                Consumer(
+                  builder: (context, ref, child) {
+                    final notificationSettings = ref.watch(notificationSettingsProvider);
+                    return _buildSection(
+                      title: localizations?.notificationSettings ?? '알림 설정',
+                      children: [
+                        _buildSwitchTile(
+                          title: localizations?.enableNotifications ?? '알림 허용',
+                          subtitle: localizations?.notificationSubtitle ?? '체중 기록 리마인더를 받습니다',
+                          value: notificationSettings.isEnabled,
+                          onChanged: (value) {
+                            ref.read(notificationSettingsProvider.notifier).toggleEnabled();
+                          },
+                        ),
+                        if (notificationSettings.isEnabled) ...[
+                          _buildListTile(
+                            title: localizations?.notificationTime ?? '알림 시간',
+                            subtitle: notificationSettings.reminderTime.format(),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => _selectNotificationTime(ref),
+                          ),
+                          _buildListTile(
+                            title: localizations?.notificationDays ?? '알림 요일',
+                            subtitle: _getSelectedDaysText(notificationSettings.selectedDays),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => _selectNotificationDays(ref),
+                          ),
+                        ],
+                      ],
+                    );
+                  },
+                ),
+                
+                // 테마 및 언어 설정
+                _buildSection(
+                  title: localizations?.appearance ?? '외관',
+                  children: [
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final themeMode = ref.watch(themeModeProvider);
+                        return _buildListTile(
+                          title: localizations?.theme ?? '테마',
+                          subtitle: _getThemeModeText(themeMode),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () => _showThemeModeDialog(ref),
+                        );
+                      },
+                    ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final locale = ref.watch(localeProvider);
+                        return _buildListTile(
+                          title: localizations?.language ?? '언어',
+                          subtitle: locale.languageCode == 'ko' ? '한국어' : 'English',
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () => _showLanguageDialog(ref),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        
+        const VerticalDivider(thickness: 1, width: 1),
+        
+        // 오른쪽: 데이터 관리 및 기타 설정
+        Expanded(
+          flex: 1,
+          child: SingleChildScrollView(
+            padding: ResponsiveUtils.getResponsivePadding(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 동기화 설정
+                if (!_isDemoMode)
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final syncState = ref.watch(syncProvider);
+                      return _buildSection(
+                        title: localizations?.dataSync ?? '데이터 동기화',
+                        children: [
+                          _buildListTile(
+                            title: localizations?.syncStatus ?? '동기화 상태',
+                            subtitle: _getSyncStatusText(
+                              syncState.lastSyncTime,
+                              syncState.isSyncing,
+                              syncState.lastError,
+                            ),
+                            trailing: syncState.isSyncing
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : TextButton(
+                                    onPressed: () => _performSync(ref),
+                                    child: Text(localizations?.syncNow ?? '동기화'),
+                                  ),
+                          ),
+                          if (syncState.lastResult != null)
+                            _buildListTile(
+                              title: localizations?.lastSyncResult ?? '마지막 동기화 결과',
+                              subtitle: syncState.lastResult.toString(),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                
+                // 백업/복원
+                _buildSection(
+                  title: localizations?.backupRestore ?? '백업/복원',
+                  children: [
+                    _buildListTile(
+                      title: localizations?.createBackup ?? '백업 생성',
+                      subtitle: localizations?.createBackupSubtitle ?? '현재 데이터를 파일로 저장',
+                      leading: const Icon(Icons.backup_outlined),
+                      onTap: _createBackup,
+                    ),
+                    _buildListTile(
+                      title: localizations?.restoreBackup ?? '데이터 복원',
+                      subtitle: localizations?.restoreBackupSubtitle ?? '백업 파일에서 데이터 복원',
+                      leading: const Icon(Icons.restore_outlined),
+                      onTap: _restoreBackup,
+                    ),
+                    _buildListTile(
+                      title: localizations?.manageBackups ?? '백업 파일 관리',
+                      subtitle: localizations?.manageBackupsSubtitle ?? '저장된 백업 파일 보기',
+                      leading: const Icon(Icons.folder_outlined),
+                      onTap: _manageBackupFiles,
+                    ),
+                  ],
+                ),
+                
+                // 데이터 관리
+                _buildSection(
+                  title: localizations?.dataManagement ?? '데이터 관리',
+                  children: [
+                    _buildListTile(
+                      title: localizations?.clearAllData ?? '모든 데이터 초기화',
+                      subtitle: localizations?.clearAllDataSubtitle ?? '모든 체중 기록과 목표 삭제',
+                      leading: const Icon(Icons.delete_forever_outlined, color: AppColors.error),
+                      titleStyle: const TextStyle(color: AppColors.error),
+                      onTap: _clearAllData,
+                    ),
+                  ],
+                ),
+                
+                // 앱 정보
+                _buildSection(
+                  title: localizations?.appInfo ?? '앱 정보',
+                  children: [
+                    _buildListTile(
+                      title: localizations?.version ?? '버전',
+                      subtitle: '1.0.0',
+                    ),
+                    _buildListTile(
+                      title: localizations?.privacyPolicy ?? '개인정보 처리방침',
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () {
+                        // TODO: 개인정보 처리방침 페이지로 이동
+                      },
+                    ),
+                    _buildListTile(
+                      title: localizations?.termsOfService ?? '이용약관',
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () {
+                        // TODO: 이용약관 페이지로 이동
+                      },
+                    ),
+                  ],
+                ),
+                
+                // 로그아웃 버튼
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: _signOut,
+                    icon: const Icon(Icons.logout, color: AppColors.error),
+                    label: Text(
+                      _isDemoMode 
+                          ? localizations?.exitDemoMode ?? '데모 모드 종료'
+                          : localizations?.signOut ?? '로그아웃',
+                      style: const TextStyle(color: AppColors.error),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      side: const BorderSide(color: AppColors.error),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

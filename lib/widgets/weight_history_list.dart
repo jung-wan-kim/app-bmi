@@ -5,6 +5,8 @@ import '../models/weight_record.dart';
 import '../providers/weight_records_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/utils/bmi_calculator.dart';
+import 'animated_widgets.dart';
+import '../core/constants/app_animations.dart';
 
 class WeightHistoryList extends ConsumerWidget {
   final bool showAllRecords;
@@ -55,7 +57,12 @@ class WeightHistoryList extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 16),
-        ...displayRecords.map((record) => _buildRecordItem(context, ref, record)),
+        ...displayRecords.asMap().entries.map((entry) => 
+          SlideInAnimation(
+            delay: AppAnimations.listItemStaggerDelay * entry.key,
+            child: _buildRecordItem(context, ref, entry.value),
+          ),
+        ),
       ],
     );
   }

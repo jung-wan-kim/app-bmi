@@ -7,6 +7,11 @@ import '../core/constants/app_colors.dart';
 import '../core/constants/app_constants.dart';
 import '../core/utils/bmi_calculator.dart';
 import '../providers/weight_records_provider.dart';
+import '../providers/theme_provider.dart';
+import '../widgets/animated_widgets.dart';
+import '../core/constants/app_animations.dart';
+import '../core/constants/app_accessibility.dart';
+import '../widgets/accessible_button.dart';
 
 class WeightInputScreen extends ConsumerStatefulWidget {
   const WeightInputScreen({super.key});
@@ -156,22 +161,27 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
   
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(isDarkModeProvider);
     final weight = double.tryParse(_weightController.text) ?? 0;
     final bmi = weight > 0 ? BMICalculator.calculateBMI(weight, userHeight) : 0;
     final bmiCategory = weight > 0 ? BMICalculator.getBMICategory(bmi.toDouble()) : null;
     
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDarkMode ? AppColors.backgroundDark : AppColors.background,
       appBar: AppBar(
         title: const Text('체중 기록'),
         actions: [
-          TextButton(
-            onPressed: _saveWeight,
-            child: const Text(
-              '저장',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+          Semantics(
+            button: true,
+            label: AppAccessibility.semanticLabels['saveWeight'],
+            child: TextButton(
+              onPressed: _saveWeight,
+              child: const Text(
+                '저장',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -186,14 +196,20 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 날짜 선택
-                Text(
-                  '날짜',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                SlideInAnimation(
+                  startOffset: const Offset(0, -0.2),
+                  child: Text(
+                    '날짜',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
-                Row(
+                SlideInAnimation(
+                  delay: AppAnimations.listItemStaggerDelay,
+                  startOffset: const Offset(0, -0.2),
+                  child: Row(
                   children: [
                     Expanded(
                       child: InkWell(
@@ -251,20 +267,26 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
                       ),
                     ),
                   ],
+                  ),
                 ),
                 const SizedBox(height: 24),
                 
                 // 체중 입력
-                Text(
+                SlideInAnimation(
+                  delay: AppAnimations.listItemStaggerDelay * 2,
+                  child: Text(
                   '체중 (kg)',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
+                  ),
                 ),
                 const SizedBox(height: 12),
-                TextFormField(
-                  controller: _weightController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                SlideInAnimation(
+                  delay: AppAnimations.listItemStaggerDelay * 3,
+                  child: TextFormField(
+                    controller: _weightController,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -276,6 +298,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
                       color: AppColors.textSecondary.withOpacity(0.5),
                     ),
                     suffixText: 'kg',
+                    semanticCounterText: AppAccessibility.hints['weightInputHint'],
                     suffixStyle: const TextStyle(
                       fontSize: 20,
                       color: AppColors.textSecondary,
@@ -294,6 +317,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
                   onChanged: (value) {
                     setState(() {}); // BMI 실시간 계산을 위해
                   },
+                  ),
                 ),
                 const SizedBox(height: 24),
                 

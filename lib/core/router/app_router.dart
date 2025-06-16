@@ -13,6 +13,7 @@ import '../../screens/weight_input_screen.dart';
 import '../../screens/statistics_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/goal_setting_screen.dart';
+import '../constants/app_animations.dart';
 
 /// 라우터 프로바이더
 final routerProvider = Provider<GoRouter>((ref) {
@@ -24,14 +25,38 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         name: 'splash',
-        builder: (context, state) => const SplashScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: const SplashScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: AppAnimations.pageTransitionDuration,
+        ),
       ),
       
       // 온보딩
       GoRoute(
         path: '/onboarding',
         name: 'onboarding',
-        builder: (context, state) => const OnboardingScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: const OnboardingScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+          transitionDuration: AppAnimations.pageTransitionDuration,
+        ),
       ),
       
       // 로그인

@@ -278,6 +278,9 @@ class SyncService {
       targetDate: serverGoal['target_date'] != null 
           ? DateTime.parse(serverGoal['target_date'])
           : null,
+      createdAt: serverGoal['created_at'] != null
+          ? DateTime.parse(serverGoal['created_at'])
+          : DateTime.now(),
       isAchieved: serverGoal['is_achieved'] ?? false,
       achievedAt: serverGoal['achieved_at'] != null
           ? DateTime.parse(serverGoal['achieved_at'])

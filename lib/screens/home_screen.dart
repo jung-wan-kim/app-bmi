@@ -12,10 +12,17 @@ import '../providers/goal_provider.dart';
 import '../providers/app_lifecycle_provider.dart';
 import '../providers/realtime_sync_provider.dart';
 import '../providers/offline_support_provider.dart';
+import '../providers/theme_provider.dart';
 import '../widgets/weight_history_list.dart';
 import '../widgets/bmi_character.dart';
 import '../widgets/bmi_character_painter.dart';
 import '../widgets/advanced_bmi_character.dart';
+import '../widgets/animated_widgets.dart';
+import '../core/constants/app_animations.dart';
+import '../core/constants/app_accessibility.dart';
+import '../widgets/accessible_button.dart';
+import '../l10n/app_localizations.dart';
+import '../core/utils/responsive_utils.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -81,17 +88,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(isDarkModeProvider);
+    final deviceType = ResponsiveUtils.getDeviceType(context);
+    final isLargeScreen = ResponsiveUtils.isLargeScreen(context);
+    
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDarkMode ? AppColors.backgroundDark : AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
+        child: ResponsiveBuilder(
+          builder: (context, deviceType) {
+            if (isLargeScreen) {
+              return _buildTabletLayout(context, isDarkMode);
+            } else {
+              return _buildMobileLayout(context, isDarkMode);
+            }
+          },
+        ),
+      ),
+      bottomNavigationBar: deviceType == DeviceType.mobile ? _buildBottomNavigation() : null,
+    );
+  }
+  
+  Widget _buildMobileLayout(BuildContext context, bool isDarkMode) {
+    return SingleChildScrollView(
+      padding: ResponsiveUtils.getResponsivePadding(context),
+      child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 데모 모드 배너
               if (isDemoMode)
-                Container(
+                FadeInAnimation(
+                  child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   margin: const EdgeInsets.only(bottom: 16),
@@ -113,6 +140,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                     ],
+                  ),
                   ),
                 ),
               
@@ -220,14 +248,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '안녕하세요, $userName님! 👋',
+                        AppLocalizations.of(context)?.greeting.replaceAll('{}', userName) ?? '안녕하세요, $userName님! 👋',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '오늘도 건강한 하루 되세요',
+                        AppLocalizations.of(context)?.appName ?? 'BMI 트래커',
                         style: TextStyle(
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.textSecondaryDark : AppColors.textSecondary,
                           fontSize: 14,
                         ),
                       ),
@@ -243,7 +271,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: 24),
               
               // 현재 상태 카드
-              Container(
+              SlideInAnimation(
+                delay: AppAnimations.listItemStaggerDelay,
+                child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -322,23 +352,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ],
                 ),
+                ),
               ),
               const SizedBox(height: 24),
               
               // BMI 캐릭터
-              Center(
-                child: AdvancedBMICharacter(
-                  bmi: currentBMI,
-                  size: 200,
-                  gender: userGender,
+              ScaleInAnimation(
+                duration: AppAnimations.cardAnimationDuration,
+                delay: AppAnimations.listItemStaggerDelay * 2,
+                child: Semantics(
+                  label: AppAccessibility.getBMIAnnouncement(currentBMI, bmiCategory.displayName),
+                  child: Center(
+                    child: AdvancedBMICharacter(
+                      bmi: currentBMI,
+                      size: 200,
+                      gender: userGender,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
               
               // BMI 진행 상황 표시
-              BMIProgressIndicator(
-                currentBMI: currentBMI,
-                targetBMI: 22.0,
+              FadeInAnimation(
+                duration: AppAnimations.normalDuration,
+                delay: AppAnimations.listItemStaggerDelay * 3,
+                child: BMIProgressIndicator(
+                  currentBMI: currentBMI,
+                  targetBMI: 22.0,
+                ),
               ),
               const SizedBox(height: 24),
               
@@ -503,11 +545,537 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
               ),
-            ],
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTabletLayout(BuildContext context, bool isDarkMode) {
+    return Row(
+      children: [
+        // 사이드 네비게이션
+        NavigationRail(
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: (index) {
+            setState(() => _selectedIndex = index);
+            switch (index) {
+              case 0:
+                break;
+              case 1:
+                context.push('/home/statistics');
+                break;
+              case 2:
+                context.push('/home/settings');
+                break;
+            }
+          },
+          labelType: NavigationRailLabelType.all,
+          destinations: const [
+            NavigationRailDestination(
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home),
+              label: Text('홈'),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.bar_chart_outlined),
+              selectedIcon: Icon(Icons.bar_chart),
+              label: Text('통계'),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.person_outline),
+              selectedIcon: Icon(Icons.person),
+              label: Text('프로필'),
+            ),
+          ],
+        ),
+        const VerticalDivider(thickness: 1, width: 1),
+        // 메인 콘텐츠
+        Expanded(
+          child: SingleChildScrollView(
+            padding: ResponsiveUtils.getResponsivePadding(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 데모 모드 배너
+                if (isDemoMode)
+                  FadeInAnimation(
+                    child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.warning.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, color: AppColors.warning, size: 16),
+                        const SizedBox(width: 8),
+                        Text(
+                          '데모 모드로 실행 중입니다',
+                          style: TextStyle(
+                            color: AppColors.warning,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    ),
+                  ),
+                
+                // 네트워크 및 동기화 상태
+                if (!isDemoMode)
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final isOnline = ref.watch(isOnlineProvider);
+                      final networkStatus = ref.watch(networkStatusProvider);
+                      final offlineQueueSize = ref.watch(offlineQueueSizeProvider);
+                      final isRealtimeConnected = ref.watch(isRealtimeConnectedProvider);
+                      
+                      return Column(
+                        children: [
+                          // 오프라인 상태 표시
+                          if (!isOnline || offlineQueueSize > 0)
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              margin: const EdgeInsets.only(bottom: 8),
+                              decoration: BoxDecoration(
+                                color: isOnline 
+                                    ? AppColors.warning.withOpacity(0.1)
+                                    : AppColors.error.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: isOnline 
+                                      ? AppColors.warning.withOpacity(0.3)
+                                      : AppColors.error.withOpacity(0.3),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    isOnline ? Icons.cloud_queue : Icons.cloud_off,
+                                    color: isOnline ? AppColors.warning : AppColors.error,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      isOnline 
+                                          ? '대기 중인 동기화: $offlineQueueSize개'
+                                          : '오프라인 모드 (대기: $offlineQueueSize개)',
+                                      style: TextStyle(
+                                        color: isOnline ? AppColors.warning : AppColors.error,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  if (isOnline && offlineQueueSize > 0)
+                                    TextButton(
+                                      onPressed: () async {
+                                        await ref.read(offlineSupportProvider.notifier).processQueueManually();
+                                      },
+                                      child: const Text('동기화', style: TextStyle(fontSize: 12)),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          
+                          // 실시간 동기화 상태
+                          if (isOnline && isRealtimeConnected)
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              decoration: BoxDecoration(
+                                color: AppColors.success.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: AppColors.success.withOpacity(0.3),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.sync,
+                                    color: AppColors.success,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    '실시간 동기화 활성',
+                                    style: TextStyle(
+                                      color: AppColors.success,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                
+                // 태블릿 레이아웃: 좌우 분할
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 왼쪽: 현재 상태와 BMI 캐릭터
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              // 헤더
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)?.greeting.replaceAll('{}', userName) ?? '안녕하세요, $userName님! 👋',
+                                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                          fontSize: ResponsiveUtils.getResponsiveFontSize(
+                                            context: context,
+                                            baseSize: 24,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        AppLocalizations.of(context)?.appName ?? 'BMI 트래커',
+                                        style: TextStyle(
+                                          color: isDarkMode ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                                          fontSize: ResponsiveUtils.getResponsiveFontSize(
+                                            context: context,
+                                            baseSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                    onPressed: () => context.push('/home/settings'),
+                                    icon: const Icon(Icons.settings_outlined),
+                                    iconSize: 28,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 24),
+                              
+                              // 현재 상태 카드
+                              SlideInAnimation(
+                                delay: AppAnimations.listItemStaggerDelay,
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        AppColors.primary,
+                                        AppColors.primaryLight,
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.primary.withOpacity(0.3),
+                                        blurRadius: 20,
+                                        offset: const Offset(0, 10),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                '현재 체중',
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                '${currentWeight.toStringAsFixed(1)} kg',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.all(16),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withOpacity(0.2),
+                                              borderRadius: BorderRadius.circular(16),
+                                            ),
+                                            child: const Icon(
+                                              Icons.monitor_weight_outlined,
+                                              color: Colors.white,
+                                              size: 32,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        children: [
+                                          _buildInfoChip(
+                                            label: 'BMI',
+                                            value: currentBMI.toStringAsFixed(1),
+                                            color: _getBMIColor(),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          _buildInfoChip(
+                                            label: '상태',
+                                            value: BMICalculator.getCategoryName(bmiCategory),
+                                            color: _getBMIColor(),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+                              
+                              // BMI 캐릭터
+                              ScaleInAnimation(
+                                duration: AppAnimations.cardAnimationDuration,
+                                delay: AppAnimations.listItemStaggerDelay * 2,
+                                child: Semantics(
+                                  label: AppAccessibility.getBMIAnnouncement(currentBMI, bmiCategory.displayName),
+                                  child: Center(
+                                    child: AdvancedBMICharacter(
+                                      bmi: currentBMI,
+                                      size: ResponsiveUtils.getResponsiveValue(
+                                        context: context,
+                                        mobile: 200,
+                                        tablet: 280,
+                                        desktop: 320,
+                                      ),
+                                      gender: userGender,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+                              
+                              // BMI 진행 상황 표시
+                              FadeInAnimation(
+                                duration: AppAnimations.normalDuration,
+                                delay: AppAnimations.listItemStaggerDelay * 3,
+                                child: BMIProgressIndicator(
+                                  currentBMI: currentBMI,
+                                  targetBMI: 22.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                        const SizedBox(width: 32),
+                        
+                        // 오른쪽: 목표, 차트, 기록
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              // 목표 진행 상황
+                              Consumer(
+                                builder: (context, ref, child) {
+                                  final goal = ref.watch(goalProvider);
+                                  
+                                  if (goal == null) {
+                                    return Container(
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.surface,
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(color: AppColors.border),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Icon(
+                                            Icons.flag_outlined,
+                                            size: 48,
+                                            color: AppColors.textSecondary.withOpacity(0.5),
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Text(
+                                            '목표를 설정해보세요',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: AppColors.textSecondary,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          OutlinedButton(
+                                            onPressed: () => context.push('/home/goal-setting'),
+                                            child: const Text('목표 설정하기'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                  
+                                  final progress = ref.read(goalProvider.notifier).calculateProgress(currentWeight, startWeight);
+                                  final weightDifference = currentWeight - goal.targetWeight;
+                                  
+                                  return Container(
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.surface,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(color: AppColors.border),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              '목표 달성률',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  '${progress.toInt()}%',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppColors.primary,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 8),
+                                                IconButton(
+                                                  onPressed: () => context.push('/home/goal-setting'),
+                                                  icon: const Icon(Icons.edit_outlined, size: 20),
+                                                  constraints: const BoxConstraints(),
+                                                  padding: EdgeInsets.zero,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: LinearProgressIndicator(
+                                            value: progress / 100,
+                                            minHeight: 8,
+                                            backgroundColor: AppColors.border,
+                                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Text(
+                                          '목표 체중: ${goal.targetWeight.toStringAsFixed(1)}kg (${weightDifference.abs().toStringAsFixed(1)}kg ${weightDifference > 0 ? "감량" : "증량"} 필요)',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: AppColors.textSecondary,
+                                          ),
+                                        ),
+                                        if (goal.targetDate != null) ...[
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            '목표 날짜: ${DateFormat('yyyy년 MM월 dd일').format(goal.targetDate!)}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: AppColors.textSecondary,
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 24),
+                              
+                              // 최근 7일 차트
+                              Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: AppColors.border),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      '최근 7일 변화',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      height: 200,
+                                      child: _buildChart(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              
+                              // 체중 기록 히스토리
+                              const WeightHistoryList(limit: 5),
+                              const SizedBox(height: 24),
+                              
+                              // 체중 기록 버튼
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  onPressed: () => context.push('/home/weight-input'),
+                                  icon: const Icon(Icons.add),
+                                  label: const Text('오늘 체중 기록하기'),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+      ],
+    );
+  }
+  
+  Widget _buildBottomNavigation() {
+    return BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() => _selectedIndex = index);
