@@ -17,7 +17,7 @@ import '../providers/offline_support_provider.dart';
 import '../providers/theme_provider.dart';
 import '../widgets/weight_history_list.dart';
 import '../widgets/charts/weight_line_chart.dart';
-import '../widgets/charts/bmi_gauge.dart';
+import '../widgets/charts/bmi_linear_chart.dart';
 import '../widgets/common/custom_button.dart';
 import '../widgets/animated_widgets.dart';
 import '../core/constants/app_animations.dart';
@@ -382,12 +382,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Center(
-                      child: BMIGauge(
-                        bmi: currentBMI,
-                        targetBmi: 22.0,
-                        size: 180,
-                      ),
+                    BMILinearChart(
+                      bmi: currentBMI,
+                      targetBmi: 22.0,
+                      width: double.infinity,
+                      height: 80,
                     ),
                   ],
                 ),
@@ -958,12 +957,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 16),
-                                    Center(
-                                      child: BMIGauge(
-                                        bmi: currentBMI,
-                                        targetBmi: 22.0,
-                                        size: 240,
-                                      ),
+                                    BMILinearChart(
+                                      bmi: currentBMI,
+                                      targetBmi: 22.0,
+                                      width: double.infinity,
+                                      height: 100,
                                     ),
                                   ],
                                 ),
