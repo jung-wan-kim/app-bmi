@@ -14,9 +14,13 @@ import '../providers/realtime_sync_provider.dart';
 import '../providers/offline_support_provider.dart';
 import '../providers/theme_provider.dart';
 import '../widgets/weight_history_list.dart';
-import '../widgets/bmi_character.dart';
-import '../widgets/bmi_character_painter.dart';
-import '../widgets/advanced_bmi_character.dart';
+import '../widgets/character/bmi_character.dart';
+import '../widgets/character/character_animator.dart';
+import '../widgets/charts/weight_line_chart.dart';
+import '../widgets/charts/bmi_gauge.dart';
+import '../widgets/charts/progress_chart.dart';
+import '../widgets/common/custom_button.dart';
+import '../widgets/common/input_field.dart';
 import '../widgets/animated_widgets.dart';
 import '../core/constants/app_animations.dart';
 import '../core/constants/app_accessibility.dart';
@@ -363,23 +367,47 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: Semantics(
                   label: AppAccessibility.getBMIAnnouncement(currentBMI, bmiCategory.displayName),
                   child: Center(
-                    child: AdvancedBMICharacter(
-                      bmi: currentBMI,
-                      size: 200,
-                      gender: userGender,
+                    child: CharacterAnimator(
+                      animationType: AnimationType.float,
+                      child: BMICharacter(
+                        bmi: currentBMI,
+                        targetBmi: 22.0,
+                        size: 200,
+                        style: CharacterStyle.cute,
+                      ),
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
               
-              // BMI 진행 상황 표시
-              FadeInAnimation(
-                duration: AppAnimations.normalDuration,
-                delay: AppAnimations.listItemStaggerDelay * 3,
-                child: BMIProgressIndicator(
-                  currentBMI: currentBMI,
-                  targetBMI: 22.0,
+              // BMI 게이지
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'BMI 상태',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: BMIGauge(
+                        bmi: currentBMI,
+                        targetBmi: 22.0,
+                        size: 180,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 24),
@@ -425,107 +453,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   final progress = ref.read(goalProvider.notifier).calculateProgress(currentWeight, startWeight);
                   final weightDifference = currentWeight - goal.targetWeight;
                   
-                  return Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                  return Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              '목표 달성률',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Row(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  '${progress.toInt()}%',
+                                const Text(
+                                  '목표 진행 상황',
                                   style: TextStyle(
                                     fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                const SizedBox(width: 8),
-                                IconButton(
-                                  onPressed: () => context.push('/home/goal-setting'),
-                                  icon: const Icon(Icons.edit_outlined, size: 20),
-                                  constraints: const BoxConstraints(),
-                                  padding: EdgeInsets.zero,
+                                const SizedBox(height: 4),
+                                Text(
+                                  '목표 체중: ${goal.targetWeight.toStringAsFixed(1)}kg',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.textSecondary,
+                                  ),
                                 ),
                               ],
                             ),
+                            IconButton(
+                              onPressed: () => context.push('/home/goal-setting'),
+                              icon: const Icon(Icons.edit_outlined),
+                              tooltip: '목표 수정',
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: LinearProgressIndicator(
-                            value: progress / 100,
-                            minHeight: 8,
-                            backgroundColor: AppColors.border,
-                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          '목표 체중: ${goal.targetWeight.toStringAsFixed(1)}kg (${weightDifference.abs().toStringAsFixed(1)}kg ${weightDifference > 0 ? "감량" : "증량"} 필요)',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                        if (goal.targetDate != null) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            '목표 날짜: ${DateFormat('yyyy년 MM월 dd일').format(goal.targetDate!)}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 16),
+                      ProgressChart(
+                        currentWeight: currentWeight,
+                        startWeight: startWeight,
+                        targetWeight: goal.targetWeight,
+                        targetDate: goal.targetDate,
+                        size: 200,
+                        showDetails: true,
+                      ),
+                    ],
                   );
                 },
               ),
               const SizedBox(height: 24),
               
               // 최근 7일 차트
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '최근 7일 변화',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      height: 200,
-                      child: _buildChart(),
-                    ),
-                  ],
-                ),
+              Consumer(
+                builder: (context, ref, child) {
+                  final records = ref.watch(weightRecordsProvider);
+                  final goal = ref.watch(goalProvider);
+                  
+                  return WeightLineChart(
+                    records: records,
+                    height: height,
+                    targetWeight: goal?.targetWeight,
+                    period: 'week',
+                    showBmiLine: true,
+                  );
+                },
               ),
               const SizedBox(height: 24),
               
@@ -534,16 +530,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: 24),
               
               // 체중 기록 버튼
-              SizedBox(
+              CustomButton(
+                text: '오늘 체중 기록하기',
+                onPressed: () => context.push('/home/weight-input'),
+                icon: Icons.add,
                 width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () => context.push('/home/weight-input'),
-                  icon: const Icon(Icons.add),
-                  label: const Text('오늘 체중 기록하기'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                ),
               ),
         ],
       ),
@@ -863,28 +854,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: Semantics(
                                   label: AppAccessibility.getBMIAnnouncement(currentBMI, bmiCategory.displayName),
                                   child: Center(
-                                    child: AdvancedBMICharacter(
-                                      bmi: currentBMI,
-                                      size: ResponsiveUtils.getResponsiveValue(
-                                        context: context,
-                                        mobile: 200,
-                                        tablet: 280,
-                                        desktop: 320,
+                                    child: CharacterAnimator(
+                                      animationType: AnimationType.float,
+                                      child: BMICharacter(
+                                        bmi: currentBMI,
+                                        targetBmi: 22.0,
+                                        size: ResponsiveUtils.getResponsiveValue(
+                                          context: context,
+                                          mobile: 200,
+                                          tablet: 280,
+                                          desktop: 320,
+                                        ),
+                                        style: CharacterStyle.cute,
                                       ),
-                                      gender: userGender,
                                     ),
                                   ),
                                 ),
                               ),
                               const SizedBox(height: 32),
                               
-                              // BMI 진행 상황 표시
-                              FadeInAnimation(
-                                duration: AppAnimations.normalDuration,
-                                delay: AppAnimations.listItemStaggerDelay * 3,
-                                child: BMIProgressIndicator(
-                                  currentBMI: currentBMI,
-                                  targetBMI: 22.0,
+                              // BMI 게이지
+                              Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: AppColors.border),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'BMI 상태',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Center(
+                                      child: BMIGauge(
+                                        bmi: currentBMI,
+                                        targetBmi: 22.0,
+                                        size: 240,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -939,107 +954,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   final progress = ref.read(goalProvider.notifier).calculateProgress(currentWeight, startWeight);
                                   final weightDifference = currentWeight - goal.targetWeight;
                                   
-                                  return Container(
-                                    padding: const EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.surface,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: AppColors.border),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(20),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.surface,
+                                          borderRadius: BorderRadius.circular(16),
+                                          border: Border.all(color: AppColors.border),
+                                        ),
+                                        child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            const Text(
-                                              '목표 달성률',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            Row(
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  '${progress.toInt()}%',
+                                                const Text(
+                                                  '목표 진행 상황',
                                                   style: TextStyle(
                                                     fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors.primary,
+                                                    fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
-                                                const SizedBox(width: 8),
-                                                IconButton(
-                                                  onPressed: () => context.push('/home/goal-setting'),
-                                                  icon: const Icon(Icons.edit_outlined, size: 20),
-                                                  constraints: const BoxConstraints(),
-                                                  padding: EdgeInsets.zero,
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  '목표 체중: ${goal.targetWeight.toStringAsFixed(1)}kg',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: AppColors.textSecondary,
+                                                  ),
                                                 ),
                                               ],
                                             ),
+                                            IconButton(
+                                              onPressed: () => context.push('/home/goal-setting'),
+                                              icon: const Icon(Icons.edit_outlined),
+                                              tooltip: '목표 수정',
+                                            ),
                                           ],
                                         ),
-                                        const SizedBox(height: 12),
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
-                                          child: LinearProgressIndicator(
-                                            value: progress / 100,
-                                            minHeight: 8,
-                                            backgroundColor: AppColors.border,
-                                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 12),
-                                        Text(
-                                          '목표 체중: ${goal.targetWeight.toStringAsFixed(1)}kg (${weightDifference.abs().toStringAsFixed(1)}kg ${weightDifference > 0 ? "감량" : "증량"} 필요)',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: AppColors.textSecondary,
-                                          ),
-                                        ),
-                                        if (goal.targetDate != null) ...[
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            '목표 날짜: ${DateFormat('yyyy년 MM월 dd일').format(goal.targetDate!)}',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: AppColors.textSecondary,
-                                            ),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      ProgressChart(
+                                        currentWeight: currentWeight,
+                                        startWeight: startWeight,
+                                        targetWeight: goal.targetWeight,
+                                        targetDate: goal.targetDate,
+                                        size: 280,
+                                        showDetails: true,
+                                      ),
+                                    ],
                                   );
                                 },
                               ),
                               const SizedBox(height: 24),
                               
                               // 최근 7일 차트
-                              Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  color: AppColors.surface,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: AppColors.border),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      '최근 7일 변화',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    SizedBox(
-                                      height: 200,
-                                      child: _buildChart(),
-                                    ),
-                                  ],
-                                ),
+                              Consumer(
+                                builder: (context, ref, child) {
+                                  final records = ref.watch(weightRecordsProvider);
+                                  final goal = ref.watch(goalProvider);
+                                  
+                                  return WeightLineChart(
+                                    records: records,
+                                    height: height,
+                                    targetWeight: goal?.targetWeight,
+                                    period: 'week',
+                                    showBmiLine: true,
+                                  );
+                                },
                               ),
                               const SizedBox(height: 24),
                               
@@ -1048,16 +1031,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               const SizedBox(height: 24),
                               
                               // 체중 기록 버튼
-                              SizedBox(
+                              CustomButton(
+                                text: '오늘 체중 기록하기',
+                                onPressed: () => context.push('/home/weight-input'),
+                                icon: Icons.add,
                                 width: double.infinity,
-                                child: ElevatedButton.icon(
-                                  onPressed: () => context.push('/home/weight-input'),
-                                  icon: const Icon(Icons.add),
-                                  label: const Text('오늘 체중 기록하기'),
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
-                                  ),
-                                ),
                               ),
                             ],
                           ),
@@ -1076,38 +1054,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   
   Widget _buildBottomNavigation() {
     return BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() => _selectedIndex = index);
-          switch (index) {
-            case 0:
-              break; // 홈
-            case 1:
-              context.push('/home/statistics');
-              break;
-            case 2:
-              context.push('/home/settings');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_outlined),
-            activeIcon: Icon(Icons.bar_chart),
-            label: '통계',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: '프로필',
-          ),
-        ],
-      ),
+      currentIndex: _selectedIndex,
+      onTap: (index) {
+        setState(() => _selectedIndex = index);
+        switch (index) {
+          case 0:
+            break; // 홈
+          case 1:
+            context.push('/home/statistics');
+            break;
+          case 2:
+            context.push('/home/settings');
+            break;
+        }
+      },
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          activeIcon: Icon(Icons.home),
+          label: '홈',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.bar_chart_outlined),
+          activeIcon: Icon(Icons.bar_chart),
+          label: '통계',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_outline),
+          activeIcon: Icon(Icons.person),
+          label: '프로필',
+        ),
+      ],
     );
   }
   

@@ -57,6 +57,11 @@ dependencies:
   path_provider: ^2.1.2
   share_plus: ^7.2.2
   file_picker: ^6.1.1
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+  build_runner: ^2.4.15
+  freezed: ^3.0.6
+  json_serializable: ^6.9.5
 
 dev_dependencies:
   flutter_test:
