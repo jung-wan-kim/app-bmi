@@ -83,6 +83,7 @@ class _BMIGaugeState extends State<BMIGauge>
 
   double _bmiToAngle(double bmi) {
     // BMI 범위를 각도로 변환 (15-40 범위를 -135도에서 135도로)
+    // 게이지 배경과 동일한 시작점 사용
     final clampedBmi = bmi.clamp(15.0, 40.0);
     final ratio = (clampedBmi - 15) / 25;
     return -135 + (ratio * 270);
@@ -169,53 +170,58 @@ class _BMIGaugeState extends State<BMIGauge>
     return Stack(
       alignment: Alignment.center,
       children: [
-        // 중앙의 카테고리 정보만 표시 (바늘과 겹치지 않는 위치)
-        if (widget.showLabels)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: categoryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              categoryText,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: categoryColor,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+        // BMI 수치를 중앙에 표시
+        AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            final animatedBmi = widget.animate
+                ? (widget.bmi * _animation.value)
+                : widget.bmi;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  animatedBmi.toStringAsFixed(1),
+                  style: theme.textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: categoryColor,
+                  ),
+                ),
+                Text(
+                  'BMI',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
         
-        // BMI 수치를 하단으로 이동
-        Positioned(
-          bottom: widget.size * 0.15, // 게이지 하단 부근에 위치
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  final animatedBmi = widget.animate
-                      ? (widget.bmi * _animation.value)
-                      : widget.bmi;
-                  return Text(
-                    animatedBmi.toStringAsFixed(1),
-                    style: theme.textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: categoryColor,
-                    ),
-                  );
-                },
-              ),
-              Text(
-                'BMI',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+        // 카테고리 상태를 하단에 표시
+        if (widget.showLabels)
+          Positioned(
+            bottom: widget.size * 0.12, // 게이지 하단 부근에 위치
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: categoryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: categoryColor.withOpacity(0.3),
+                  width: 1,
                 ),
               ),
-            ],
+              child: Text(
+                categoryText,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: categoryColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 11,
+                ),
+              ),
+            ),
           ),
-        ),
       ],
     );
   }
@@ -269,7 +275,7 @@ class _GaugeBackgroundPainter extends CustomPainter {
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
-      _degreesToRadians(135),
+      _degreesToRadians(-135),
       _degreesToRadians(270),
       false,
       trackPaint,
@@ -284,17 +290,22 @@ class _GaugeBackgroundPainter extends CustomPainter {
         AppColors.error,   // 비만
       ];
       
+      // BMI 범위: 15-40 (총 25 범위)
+      // 저체중: 15-18.5 (3.5/25 = 0.14)
+      // 정상: 18.5-25 (6.5/25 = 0.26) 
+      // 과체중: 25-30 (5/25 = 0.20)
+      // 비만: 30-40 (10/25 = 0.40)
       final ranges = [
-        (0.0, 0.16),    // 15-18.5
-        (0.16, 0.40),   // 18.5-25
-        (0.40, 0.60),   // 25-30
-        (0.60, 1.0),    // 30-40
+        (0.0, 0.14),    // 15-18.5 (저체중)
+        (0.14, 0.40),   // 18.5-25 (정상)
+        (0.40, 0.60),   // 25-30 (과체중)
+        (0.60, 1.0),    // 30-40 (비만)
       ];
 
       for (int i = 0; i < colors.length; i++) {
         final startRatio = ranges[i].$1;
         final endRatio = ranges[i].$2;
-        final startAngle = 135 + (startRatio * 270);
+        final startAngle = -135 + (startRatio * 270);
         final sweepAngle = (endRatio - startRatio) * 270 * animation;
 
         final paint = Paint()
@@ -315,7 +326,7 @@ class _GaugeBackgroundPainter extends CustomPainter {
 
     // 눈금
     for (int i = 0; i <= 10; i++) {
-      final angle = 135.0 + (i * 27.0); // 270도를 10등분
+      final angle = -135.0 + (i * 27.0); // 270도를 10등분
       final startRadius = radius - size.width * 0.05;
       final endRadius = radius + size.width * 0.05;
 
