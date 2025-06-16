@@ -84,8 +84,10 @@ class _BMILinearChartState extends State<BMILinearChart>
 
   double _bmiToPosition(double bmi) {
     // BMI 범위를 위치로 변환 (15-40 범위를 0-1로)
+    if (bmi.isNaN || bmi.isInfinite) return 0.0;
     final clampedBmi = bmi.clamp(15.0, 40.0);
-    return (clampedBmi - 15) / 25;
+    final position = (clampedBmi - 15) / 25;
+    return position.isNaN ? 0.0 : position.clamp(0.0, 1.0);
   }
 
   @override
@@ -220,8 +222,12 @@ class _BMILinearChartState extends State<BMILinearChart>
                     AnimatedBuilder(
                       animation: _indicatorAnimation,
                       builder: (context, child) {
+                        final leftPosition = _indicatorAnimation.value * (widget.width - 32) - 2;
+                        if (leftPosition.isNaN || leftPosition.isInfinite) {
+                          return const SizedBox.shrink();
+                        }
                         return Positioned(
-                          left: _indicatorAnimation.value * (widget.width - 32) - 2,
+                          left: leftPosition.clamp(0.0, widget.width - 32),
                           top: 0,
                           child: Column(
                             children: [

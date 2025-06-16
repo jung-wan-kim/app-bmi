@@ -300,64 +300,127 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final goal = ref.watch(goalProvider);
+                    final targetWeight = goal?.targetWeight ?? 65.0;
+                    final weightDifference = currentWeight - targetWeight;
+                    final isAboveTarget = weightDifference > 0;
+                    
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              '현재 체중',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 14,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '현재 체중',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '${currentWeight.toStringAsFixed(1)}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Text(
+                                        ' kg',
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '목표: ${targetWeight.toStringAsFixed(1)}kg',
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: isAboveTarget 
+                                            ? Colors.orange.withOpacity(0.2)
+                                            : Colors.green.withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(6),
+                                          border: Border.all(
+                                            color: isAboveTarget 
+                                              ? Colors.orange.withOpacity(0.5)
+                                              : Colors.green.withOpacity(0.5),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          isAboveTarget 
+                                            ? '${weightDifference.abs().toStringAsFixed(1)}kg 초과'
+                                            : weightDifference == 0 
+                                              ? '목표 달성!'
+                                              : '목표 달성!',
+                                          style: TextStyle(
+                                            color: isAboveTarget ? Colors.orange[200] : Colors.green[200],
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '${currentWeight.toStringAsFixed(1)} kg',
-                              style: const TextStyle(
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Icon(
+                                Icons.monitor_weight_outlined,
                                 color: Colors.white,
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
+                                size: 32,
                               ),
                             ),
                           ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: const Icon(
-                            Icons.monitor_weight_outlined,
-                            color: Colors.white,
-                            size: 32,
-                          ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            _buildInfoChip(
+                              label: 'BMI',
+                              value: currentBMI.toStringAsFixed(1),
+                              color: _getBMIColor(),
+                            ),
+                            const SizedBox(width: 12),
+                            _buildInfoChip(
+                              label: '상태',
+                              value: BMICalculator.getCategoryName(bmiCategory),
+                              color: _getBMIColor(),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        _buildInfoChip(
-                          label: 'BMI',
-                          value: currentBMI.toStringAsFixed(1),
-                          color: _getBMIColor(),
-                        ),
-                        const SizedBox(width: 12),
-                        _buildInfoChip(
-                          label: '상태',
-                          value: BMICalculator.getCategoryName(bmiCategory),
-                          color: _getBMIColor(),
-                        ),
-                      ],
-                    ),
-                  ],
+                    );
+                  },
                 ),
                 ),
               ),
@@ -390,220 +453,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 24),
-              
-              // 목표 진행 상황
-              Consumer(
-                builder: (context, ref, child) {
-                  final goal = ref.watch(goalProvider);
-                  
-                  if (goal == null) {
-                    return Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.flag_outlined,
-                            size: 48,
-                            color: AppColors.textSecondary.withOpacity(0.5),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            '목표를 설정해보세요',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          OutlinedButton(
-                            onPressed: () => context.push('/home/goal-setting'),
-                            child: const Text('목표 설정하기'),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  
-                  // final progress = ref.read(goalProvider.notifier).calculateProgress(currentWeight, startWeight);
-                  // final weightDifference = currentWeight - goal.targetWeight;
-                  
-                  // 달성률 계산
-                  final totalToLose = startWeight - goal.targetWeight;
-                  final currentLoss = startWeight - currentWeight;
-                  final progress = totalToLose > 0 ? (currentLoss / totalToLose * 100).clamp(0, 120) : 100;
-                  final weightDifference = currentWeight - goal.targetWeight;
-                  
-                  return Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              '목표 정보',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () => context.push('/home/goal-setting'),
-                              icon: const Icon(Icons.edit_outlined),
-                              tooltip: '목표 수정',
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        // 현재 체중, 목표 체중, 달성률을 한 줄에 표시
-                        Row(
-                          children: [
-                            // 현재 체중
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '현재 체중',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '${currentWeight.toStringAsFixed(1)}kg',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // 화살표
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Icon(
-                                Icons.arrow_forward,
-                                color: AppColors.textSecondary,
-                                size: 20,
-                              ),
-                            ),
-                            // 목표 체중
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '목표 체중',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '${goal.targetWeight.toStringAsFixed(1)}kg',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.success,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // 구분선
-                            Container(
-                              height: 40,
-                              width: 1,
-                              color: AppColors.border,
-                              margin: const EdgeInsets.symmetric(horizontal: 12),
-                            ),
-                            // 달성률
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '달성률',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '${progress.toStringAsFixed(0)}%',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: progress >= 100 ? AppColors.success : AppColors.warning,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        // 차이 정보
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: weightDifference > 0 
-                              ? AppColors.warning.withOpacity(0.1)
-                              : AppColors.success.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: weightDifference > 0 
-                                ? AppColors.warning.withOpacity(0.3)
-                                : AppColors.success.withOpacity(0.3),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                weightDifference > 0 ? Icons.trending_up : Icons.check_circle,
-                                size: 16,
-                                color: weightDifference > 0 ? AppColors.warning : AppColors.success,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                weightDifference > 0 
-                                  ? '목표까지 ${weightDifference.toStringAsFixed(1)}kg 남음'
-                                  : progress >= 100 
-                                    ? '목표 달성! 🎉'
-                                    : '목표 근접 중!',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: weightDifference > 0 ? AppColors.warning : AppColors.success,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
               ),
               const SizedBox(height: 24),
               
@@ -875,64 +724,127 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       ),
                                     ],
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Consumer(
+                                    builder: (context, ref, child) {
+                                      final goal = ref.watch(goalProvider);
+                                      final targetWeight = goal?.targetWeight ?? 65.0;
+                                      final weightDifference = currentWeight - targetWeight;
+                                      final isAboveTarget = weightDifference > 0;
+                                      
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text(
-                                                '현재 체중',
-                                                style: TextStyle(
-                                                  color: Colors.white70,
-                                                  fontSize: 14,
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      '현재 체중',
+                                                      style: TextStyle(
+                                                        color: Colors.white70,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                                      children: [
+                                                        Text(
+                                                          '${currentWeight.toStringAsFixed(1)}',
+                                                          style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 32,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        const Text(
+                                                          ' kg',
+                                                          style: TextStyle(
+                                                            color: Colors.white70,
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          '목표: ${targetWeight.toStringAsFixed(1)}kg',
+                                                          style: const TextStyle(
+                                                            color: Colors.white70,
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(width: 8),
+                                                        Container(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                          decoration: BoxDecoration(
+                                                            color: isAboveTarget 
+                                                              ? Colors.orange.withOpacity(0.2)
+                                                              : Colors.green.withOpacity(0.2),
+                                                            borderRadius: BorderRadius.circular(6),
+                                                            border: Border.all(
+                                                              color: isAboveTarget 
+                                                                ? Colors.orange.withOpacity(0.5)
+                                                                : Colors.green.withOpacity(0.5),
+                                                            ),
+                                                          ),
+                                                          child: Text(
+                                                            isAboveTarget 
+                                                              ? '${weightDifference.abs().toStringAsFixed(1)}kg 초과'
+                                                              : weightDifference == 0 
+                                                                ? '목표 달성!'
+                                                                : '목표 달성!',
+                                                            style: TextStyle(
+                                                              color: isAboveTarget ? Colors.orange[200] : Colors.green[200],
+                                                              fontSize: 10,
+                                                              fontWeight: FontWeight.w600,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              const SizedBox(height: 4),
-                                              Text(
-                                                '${currentWeight.toStringAsFixed(1)} kg',
-                                                style: const TextStyle(
+                                              Container(
+                                                padding: const EdgeInsets.all(16),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white.withOpacity(0.2),
+                                                  borderRadius: BorderRadius.circular(16),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.monitor_weight_outlined,
                                                   color: Colors.white,
-                                                  fontSize: 32,
-                                                  fontWeight: FontWeight.bold,
+                                                  size: 32,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.all(16),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white.withOpacity(0.2),
-                                              borderRadius: BorderRadius.circular(16),
-                                            ),
-                                            child: const Icon(
-                                              Icons.monitor_weight_outlined,
-                                              color: Colors.white,
-                                              size: 32,
-                                            ),
+                                          const SizedBox(height: 20),
+                                          Row(
+                                            children: [
+                                              _buildInfoChip(
+                                                label: 'BMI',
+                                                value: currentBMI.toStringAsFixed(1),
+                                                color: _getBMIColor(),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              _buildInfoChip(
+                                                label: '상태',
+                                                value: BMICalculator.getCategoryName(bmiCategory),
+                                                color: _getBMIColor(),
+                                              ),
+                                            ],
                                           ),
                                         ],
-                                      ),
-                                      const SizedBox(height: 20),
-                                      Row(
-                                        children: [
-                                          _buildInfoChip(
-                                            label: 'BMI',
-                                            value: currentBMI.toStringAsFixed(1),
-                                            color: _getBMIColor(),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          _buildInfoChip(
-                                            label: '상태',
-                                            value: BMICalculator.getCategoryName(bmiCategory),
-                                            color: _getBMIColor(),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
@@ -977,216 +889,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           flex: 1,
                           child: Column(
                             children: [
-                              // 목표 진행 상황
-                              Consumer(
-                                builder: (context, ref, child) {
-                                  final goal = ref.watch(goalProvider);
-                                  
-                                  if (goal == null) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.surface,
-                                        borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(color: AppColors.border),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                            Icons.flag_outlined,
-                                            size: 48,
-                                            color: AppColors.textSecondary.withOpacity(0.5),
-                                          ),
-                                          const SizedBox(height: 12),
-                                          Text(
-                                            '목표를 설정해보세요',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: AppColors.textSecondary,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 16),
-                                          OutlinedButton(
-                                            onPressed: () => context.push('/home/goal-setting'),
-                                            child: const Text('목표 설정하기'),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                  
-                                  // 달성률 계산
-                                  final totalToLose = startWeight - goal.targetWeight;
-                                  final currentLoss = startWeight - currentWeight;
-                                  final progress = totalToLose > 0 ? (currentLoss / totalToLose * 100).clamp(0, 120) : 100;
-                                  final weightDifference = currentWeight - goal.targetWeight;
-                                  
-                                  return Container(
-                                    padding: const EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.surface,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: AppColors.border),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text(
-                                              '목표 정보',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () => context.push('/home/goal-setting'),
-                                              icon: const Icon(Icons.edit_outlined),
-                                              tooltip: '목표 수정',
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 16),
-                                        // 현재 체중, 목표 체중, 달성률을 한 줄에 표시
-                                        Row(
-                                          children: [
-                                            // 현재 체중
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '현재 체중',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: AppColors.textSecondary,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  Text(
-                                                    '${currentWeight.toStringAsFixed(1)}kg',
-                                                    style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: AppColors.primary,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            // 화살표
-                                            const Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 8),
-                                              child: Icon(
-                                                Icons.arrow_forward,
-                                                color: AppColors.textSecondary,
-                                                size: 20,
-                                              ),
-                                            ),
-                                            // 목표 체중
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '목표 체중',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: AppColors.textSecondary,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  Text(
-                                                    '${goal.targetWeight.toStringAsFixed(1)}kg',
-                                                    style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: AppColors.success,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            // 구분선
-                                            Container(
-                                              height: 40,
-                                              width: 1,
-                                              color: AppColors.border,
-                                              margin: const EdgeInsets.symmetric(horizontal: 12),
-                                            ),
-                                            // 달성률
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '달성률',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: AppColors.textSecondary,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  Text(
-                                                    '${progress.toStringAsFixed(0)}%',
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: progress >= 100 ? AppColors.success : AppColors.warning,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 12),
-                                        // 차이 정보
-                                        Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: weightDifference > 0 
-                                              ? AppColors.warning.withOpacity(0.1)
-                                              : AppColors.success.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(8),
-                                            border: Border.all(
-                                              color: weightDifference > 0 
-                                                ? AppColors.warning.withOpacity(0.3)
-                                                : AppColors.success.withOpacity(0.3),
-                                            ),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                weightDifference > 0 ? Icons.trending_up : Icons.check_circle,
-                                                size: 16,
-                                                color: weightDifference > 0 ? AppColors.warning : AppColors.success,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                weightDifference > 0 
-                                                  ? '목표까지 ${weightDifference.toStringAsFixed(1)}kg 남음'
-                                                  : progress >= 100 
-                                                    ? '목표 달성! 🎉'
-                                                    : '목표 근접 중!',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: weightDifference > 0 ? AppColors.warning : AppColors.success,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 24),
                               
                               // 최근 7일 차트
                               Consumer(
