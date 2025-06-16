@@ -7,7 +7,7 @@ class BMICalculator {
   /// weight: 체중 (kg)
   /// height: 키 (cm)
   static double calculateBMI(double weight, double height) {
-    if (height <= 0) return 0;
+    if (height <= 0 || weight < 0) return 0;
     final heightInMeters = height / 100;
     return weight / pow(heightInMeters, 2);
   }
@@ -72,6 +72,34 @@ class BMICalculator {
     if (startWeight <= 0) return 0;
     return ((currentWeight - startWeight) / startWeight) * 100;
   }
+  
+  /// BMI 카테고리별 건강 조언
+  static String getHealthAdvice(BMICategory category) {
+    switch (category) {
+      case BMICategory.underweight:
+        return '영양 섭취를 늘리고 근력 운동을 시작해보세요.';
+      case BMICategory.normal:
+        return '현재 건강한 체중을 유지하고 있습니다. 계속 유지해주세요!';
+      case BMICategory.overweight:
+        return '균형 잡힌 식단과 규칙적인 운동을 시작해보세요.';
+      case BMICategory.obese:
+        return '전문가와 상담하여 체중 관리 계획을 세워보세요.';
+    }
+  }
+  
+  /// 이상적인 체중 범위 계산
+  static Map<String, double> getIdealWeight(double height) {
+    if (height <= 0) {
+      return {'min': 0, 'max': 0};
+    }
+    final heightInMeters = height / 100;
+    final minWeight = 18.5 * pow(heightInMeters, 2);
+    final maxWeight = 25.0 * pow(heightInMeters, 2);
+    return {
+      'min': minWeight.toDouble(),
+      'max': maxWeight.toDouble(),
+    };
+  }
 }
 
 /// BMI 카테고리
@@ -80,4 +108,20 @@ enum BMICategory {
   normal,
   overweight,
   obese,
+}
+
+/// BMI 카테고리 Extension
+extension BMICategoryExtension on BMICategory {
+  String get displayName {
+    switch (this) {
+      case BMICategory.underweight:
+        return '저체중';
+      case BMICategory.normal:
+        return '정상';
+      case BMICategory.overweight:
+        return '과체중';
+      case BMICategory.obese:
+        return '비만';
+    }
+  }
 }
