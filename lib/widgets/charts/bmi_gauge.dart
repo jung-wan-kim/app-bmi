@@ -166,32 +166,11 @@ class _BMIGaugeState extends State<BMIGauge>
     final categoryText = _getCategoryText(category);
     final categoryColor = _getBmiColor(widget.bmi);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        AnimatedBuilder(
-          animation: _animation,
-          builder: (context, child) {
-            final animatedBmi = widget.animate
-                ? (widget.bmi * _animation.value)
-                : widget.bmi;
-            return Text(
-              animatedBmi.toStringAsFixed(1),
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: categoryColor,
-              ),
-            );
-          },
-        ),
-        Text(
-          'BMI',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
-          ),
-        ),
-        if (widget.showLabels) ...[
-          const SizedBox(height: 8),
+        // 중앙의 카테고리 정보만 표시 (바늘과 겹치지 않는 위치)
+        if (widget.showLabels)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
@@ -206,7 +185,37 @@ class _BMIGaugeState extends State<BMIGauge>
               ),
             ),
           ),
-        ],
+        
+        // BMI 수치를 하단으로 이동
+        Positioned(
+          bottom: widget.size * 0.15, // 게이지 하단 부근에 위치
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedBuilder(
+                animation: _animation,
+                builder: (context, child) {
+                  final animatedBmi = widget.animate
+                      ? (widget.bmi * _animation.value)
+                      : widget.bmi;
+                  return Text(
+                    animatedBmi.toStringAsFixed(1),
+                    style: theme.textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: categoryColor,
+                    ),
+                  );
+                },
+              ),
+              Text(
+                'BMI',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

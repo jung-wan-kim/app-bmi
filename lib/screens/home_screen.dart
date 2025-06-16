@@ -107,6 +107,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/home/weight-input'),
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: deviceType == DeviceType.mobile ? _buildBottomNavigation() : null,
     );
   }
@@ -504,15 +510,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               
               // 체중 기록 히스토리
               const WeightHistoryList(limit: 5),
-              const SizedBox(height: 24),
-              
-              // 체중 기록 버튼
-              CustomButton(
-                text: '오늘 체중 기록하기',
-                onPressed: () => context.push('/home/weight-input'),
-                icon: Icons.add,
-                width: double.infinity,
-              ),
+              const SizedBox(height: 80), // FloatingActionButton을 위한 여백
         ],
       ),
     );
