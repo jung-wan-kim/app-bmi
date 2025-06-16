@@ -234,37 +234,34 @@ class _ProgressChartState extends State<ProgressChart>
     return Column(
       children: [
         // 체중 변화 정보
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: _buildDetailItem(
-                context,
-                '시작',
-                '${widget.startWeight.toStringAsFixed(1)} kg',
-                Icons.flag_outlined,
-                theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+        IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _buildDetailItem(
+                  context,
+                  '시작',
+                  '${widget.startWeight.toStringAsFixed(1)} kg',
+                  Icons.flag_outlined,
+                  theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+                ),
               ),
-            ),
-            Expanded(
-              child: _buildDetailItem(
-                context,
-                '현재',
-                '${widget.currentWeight.toStringAsFixed(1)} kg',
-                Icons.person,
-                theme.primaryColor,
+              Expanded(
+                child: _buildCurrentWeightItem(context),
               ),
-            ),
-            Expanded(
-              child: _buildDetailItem(
-                context,
-                '목표',
-                '${widget.targetWeight.toStringAsFixed(1)} kg',
-                Icons.star,
-                AppColors.success,
+              Expanded(
+                child: _buildDetailItem(
+                  context,
+                  '목표',
+                  '${widget.targetWeight.toStringAsFixed(1)} kg',
+                  Icons.star,
+                  AppColors.success,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 16),
         // 진행 상황
@@ -276,6 +273,47 @@ class _ProgressChartState extends State<ProgressChart>
           ),
           child: Column(
             children: [
+              // 현재 vs 목표 체중 비교
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '목표까지 차이',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: weightToLose > 0 ? AppColors.warning.withOpacity(0.1) : AppColors.success.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: weightToLose > 0 ? AppColors.warning.withOpacity(0.3) : AppColors.success.withOpacity(0.3),
+                        ),
+                      ),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          weightToLose > 0 
+                            ? '${weightToLose.toStringAsFixed(1)}kg 남음'
+                            : '목표 달성!',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: weightToLose > 0 ? AppColors.warning : AppColors.success,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -292,24 +330,6 @@ class _ProgressChartState extends State<ProgressChart>
                   ),
                 ],
               ),
-              if (weightToLose > 0) ...[
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '남은 체중',
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                    Text(
-                      '${weightToLose.toStringAsFixed(1)} kg',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
               if (daysRemaining != null && daysRemaining > 0) ...[
                 const SizedBox(height: 8),
                 Row(
@@ -344,6 +364,77 @@ class _ProgressChartState extends State<ProgressChart>
             textAlign: TextAlign.center,
           ),
         ],
+      ],
+    );
+  }
+
+  Widget _buildCurrentWeightItem(BuildContext context) {
+    final theme = Theme.of(context);
+    final weightDifference = widget.currentWeight - widget.targetWeight;
+    final isAboveTarget = weightDifference > 0;
+    final differenceColor = isAboveTarget ? AppColors.warning : AppColors.success;
+    
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          Icons.person,
+          size: 24,
+          color: theme.primaryColor,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '현재',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+          ),
+        ),
+        const SizedBox(height: 2),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            '${widget.currentWeight.toStringAsFixed(1)} kg',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Container(
+            constraints: const BoxConstraints(minWidth: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+            decoration: BoxDecoration(
+              color: differenceColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(
+                color: differenceColor.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: Text(
+              isAboveTarget 
+                ? '+${weightDifference.abs().toStringAsFixed(1)}'
+                : '-${weightDifference.abs().toStringAsFixed(1)}',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: differenceColor,
+                fontSize: 9,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+        const SizedBox(height: 1),
+        Text(
+          '목표까지',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.textTheme.bodyLarge?.color?.withOpacity(0.5),
+            fontSize: 9,
+          ),
+        ),
       ],
     );
   }
