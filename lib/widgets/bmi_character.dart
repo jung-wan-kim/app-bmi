@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import '../core/constants/app_colors.dart';
 import '../core/utils/bmi_calculator.dart';
+import 'bmi_character_painter.dart';
 
 class BMICharacter extends StatefulWidget {
   final double bmi;
   final double size;
   final bool showLabel;
+  final Gender gender;
 
   const BMICharacter({
     super.key,
     required this.bmi,
     this.size = 120,
     this.showLabel = true,
+    this.gender = Gender.male,
   });
 
   @override
@@ -50,7 +53,6 @@ class _BMICharacterState extends State<BMICharacter>
   Widget build(BuildContext context) {
     final category = BMICalculator.getBMICategory(widget.bmi);
     final color = _getCategoryColor(category);
-    final emoji = _getCategoryEmoji(category);
     final label = BMICalculator.getCategoryName(category);
 
     return Column(
@@ -62,59 +64,49 @@ class _BMICharacterState extends State<BMICharacter>
             return Transform.translate(
               offset: Offset(0, -_bounceAnimation.value),
               child: Container(
-                width: widget.size,
-                height: widget.size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      color.withOpacity(0.8),
-                      color,
-                    ],
+                width: widget.size * 1.5,
+                height: widget.size * 2,
+                child: CustomPaint(
+                  painter: BMICharacterPainter(
+                    bmi: widget.bmi,
+                    gender: widget.gender,
+                    primaryColor: color,
+                    animationValue: _controller.value,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withOpacity(0.3),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // 얼굴
-                    Text(
-                      emoji,
-                      style: TextStyle(
-                        fontSize: widget.size * 0.6,
-                      ),
-                    ),
-                    // BMI 수치
-                    Positioned(
-                      bottom: widget.size * 0.15,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          widget.bmi.toStringAsFixed(1),
-                          style: TextStyle(
-                            fontSize: widget.size * 0.12,
-                            fontWeight: FontWeight.bold,
-                            color: color,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      // BMI 수치 표시
+                      Positioned(
+                        bottom: 10,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: color.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: color.withOpacity(0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            'BMI ${widget.bmi.toStringAsFixed(1)}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -162,18 +154,6 @@ class _BMICharacterState extends State<BMICharacter>
     }
   }
 
-  String _getCategoryEmoji(BMICategory category) {
-    switch (category) {
-      case BMICategory.underweight:
-        return '😟';
-      case BMICategory.normal:
-        return '😊';
-      case BMICategory.overweight:
-        return '😐';
-      case BMICategory.obese:
-        return '😰';
-    }
-  }
 }
 
 // BMI 진행 상황을 보여주는 위젯

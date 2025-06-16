@@ -9,8 +9,13 @@ import '../core/constants/app_constants.dart';
 import '../core/utils/bmi_calculator.dart';
 import '../providers/weight_records_provider.dart';
 import '../providers/goal_provider.dart';
+import '../providers/app_lifecycle_provider.dart';
+import '../providers/realtime_sync_provider.dart';
+import '../providers/offline_support_provider.dart';
 import '../widgets/weight_history_list.dart';
 import '../widgets/bmi_character.dart';
+import '../widgets/bmi_character_painter.dart';
+import '../widgets/advanced_bmi_character.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -28,11 +33,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   double startWeight = 75.0; // 시작 체중 추가
   String userName = '사용자';
   bool isDemoMode = false;
+  Gender userGender = Gender.male;
   
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    
+    // 앱 초기화 확인
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(appLifecycleProvider.notifier);
+    });
   }
   
   Future<void> _loadUserData() async {
@@ -44,6 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         height = prefs.getDouble('demoUserHeight') ?? 170.0;
         currentWeight = prefs.getDouble('demoUserWeight') ?? 65.0;
         startWeight = prefs.getDouble('demoStartWeight') ?? currentWeight;
+        userGender = prefs.getString('userGender') == 'female' ? Gender.female : Gender.male;
       }
     });
     
@@ -102,6 +114,102 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ],
                   ),
+                ),
+              
+              // 네트워크 및 동기화 상태 (데모 모드가 아닐 때만 표시)
+              if (!isDemoMode)
+                Consumer(
+                  builder: (context, ref, child) {
+                    final isOnline = ref.watch(isOnlineProvider);
+                    final networkStatus = ref.watch(networkStatusProvider);
+                    final offlineQueueSize = ref.watch(offlineQueueSizeProvider);
+                    final isRealtimeConnected = ref.watch(isRealtimeConnectedProvider);
+                    
+                    return Column(
+                      children: [
+                        // 오프라인 상태 표시
+                        if (!isOnline || offlineQueueSize > 0)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                              color: isOnline 
+                                  ? AppColors.warning.withOpacity(0.1)
+                                  : AppColors.error.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isOnline 
+                                    ? AppColors.warning.withOpacity(0.3)
+                                    : AppColors.error.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  isOnline ? Icons.cloud_queue : Icons.cloud_off,
+                                  color: isOnline ? AppColors.warning : AppColors.error,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    isOnline 
+                                        ? '대기 중인 동기화: $offlineQueueSize개'
+                                        : '오프라인 모드 (대기: $offlineQueueSize개)',
+                                    style: TextStyle(
+                                      color: isOnline ? AppColors.warning : AppColors.error,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                if (isOnline && offlineQueueSize > 0)
+                                  TextButton(
+                                    onPressed: () async {
+                                      await ref.read(offlineSupportProvider.notifier).processQueueManually();
+                                    },
+                                    child: const Text('동기화', style: TextStyle(fontSize: 12)),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        
+                        // 실시간 동기화 상태
+                        if (isOnline && isRealtimeConnected)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            margin: const EdgeInsets.only(bottom: 16),
+                            decoration: BoxDecoration(
+                              color: AppColors.success.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: AppColors.success.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.sync,
+                                  color: AppColors.success,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '실시간 동기화 활성',
+                                  style: TextStyle(
+                                    color: AppColors.success,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    );
+                  },
                 ),
               
               // 헤더
@@ -219,9 +327,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               
               // BMI 캐릭터
               Center(
-                child: BMICharacter(
+                child: AdvancedBMICharacter(
                   bmi: currentBMI,
-                  size: 150,
+                  size: 200,
+                  gender: userGender,
                 ),
               ),
               const SizedBox(height: 24),
@@ -613,5 +722,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
+  }
+
+  String _formatTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+    
+    if (difference.inMinutes < 1) {
+      return '방금';
+    } else if (difference.inHours < 1) {
+      return '${difference.inMinutes}분 전';
+    } else if (difference.inDays < 1) {
+      return '${difference.inHours}시간 전';
+    } else {
+      return DateFormat('MM/dd HH:mm').format(dateTime);
+    }
   }
 }

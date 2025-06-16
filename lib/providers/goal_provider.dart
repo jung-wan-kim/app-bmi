@@ -101,4 +101,23 @@ class GoalNotifier extends StateNotifier<Goal?> {
     
     return DateTime.now().add(Duration(days: (weeksNeeded * 7).round()));
   }
+
+  // 실시간 동기화를 위한 메서드들
+
+  /// 실시간 동기화로부터 목표 설정
+  void setGoalFromRealtime(Goal goal) {
+    state = goal;
+    // SharedPreferences에는 자동으로 저장됨 (RealtimeSyncService에서 처리)
+  }
+
+  /// 실시간 동기화로부터 목표 삭제
+  void clearGoalFromRealtime() {
+    state = null;
+    // SharedPreferences에는 자동으로 반영됨 (RealtimeSyncService에서 처리)
+  }
+
+  /// 스토리지에서 목표를 새로고침 (실시간 동기화 초기화 시 사용)
+  Future<void> refreshFromStorage() async {
+    await _loadGoal();
+  }
 }

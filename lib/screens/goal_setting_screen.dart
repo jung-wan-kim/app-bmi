@@ -299,10 +299,10 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: _getBMIColor(BMICalculator.getBMICategory(targetBMI)).withOpacity(0.1),
+                      color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: _getBMIColor(BMICalculator.getBMICategory(targetBMI)),
+                        color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
                         width: 2,
                       ),
                     ),
@@ -313,7 +313,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                           children: [
                             Icon(
                               Icons.flag_outlined,
-                              color: _getBMIColor(BMICalculator.getBMICategory(targetBMI)),
+                              color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
                               size: 24,
                             ),
                             const SizedBox(width: 12),
@@ -321,7 +321,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                               '목표 BMI',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: _getBMIColor(BMICalculator.getBMICategory(targetBMI)),
+                                color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -330,7 +330,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                               targetBMI.toStringAsFixed(1),
                               style: TextStyle(
                                 fontSize: 28,
-                                color: _getBMIColor(BMICalculator.getBMICategory(targetBMI)),
+                                color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -338,10 +338,10 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          BMICalculator.getCategoryName(BMICalculator.getBMICategory(targetBMI)),
+                          BMICalculator.getCategoryName(BMICalculator.getBMICategory(targetBMI.toDouble())),
                           style: TextStyle(
                             fontSize: 16,
-                            color: _getBMIColor(BMICalculator.getBMICategory(targetBMI)),
+                            color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
                             fontWeight: FontWeight.w600,
                           ),
                         ),

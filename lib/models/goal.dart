@@ -4,6 +4,7 @@ class Goal {
   final DateTime? targetDate;
   final DateTime createdAt;
   final bool isAchieved;
+  final DateTime? achievedAt;
 
   Goal({
     required this.id,
@@ -11,6 +12,7 @@ class Goal {
     this.targetDate,
     required this.createdAt,
     this.isAchieved = false,
+    this.achievedAt,
   });
 
   Map<String, dynamic> toJson() => {
@@ -19,6 +21,7 @@ class Goal {
     'targetDate': targetDate?.toIso8601String(),
     'createdAt': createdAt.toIso8601String(),
     'isAchieved': isAchieved,
+    'achievedAt': achievedAt?.toIso8601String(),
   };
 
   factory Goal.fromJson(Map<String, dynamic> json) => Goal(
@@ -27,6 +30,7 @@ class Goal {
     targetDate: json['targetDate'] != null ? DateTime.parse(json['targetDate']) : null,
     createdAt: DateTime.parse(json['createdAt']),
     isAchieved: json['isAchieved'] ?? false,
+    achievedAt: json['achievedAt'] != null ? DateTime.parse(json['achievedAt']) : null,
   );
 
   Goal copyWith({
@@ -35,6 +39,7 @@ class Goal {
     DateTime? targetDate,
     DateTime? createdAt,
     bool? isAchieved,
+    DateTime? achievedAt,
   }) {
     return Goal(
       id: id ?? this.id,
@@ -42,6 +47,7 @@ class Goal {
       targetDate: targetDate ?? this.targetDate,
       createdAt: createdAt ?? this.createdAt,
       isAchieved: isAchieved ?? this.isAchieved,
+      achievedAt: achievedAt ?? this.achievedAt,
     );
   }
 }

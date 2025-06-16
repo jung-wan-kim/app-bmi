@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationSettings {
   final bool isEnabled;
-  final TimeOfDay reminderTime;
+  final NotificationTime reminderTime;
   final List<bool> selectedDays; // 월화수목금토일
 
   NotificationSettings({
@@ -22,7 +22,7 @@ class NotificationSettings {
 
   factory NotificationSettings.fromJson(Map<String, dynamic> json) => NotificationSettings(
     isEnabled: json['isEnabled'] ?? false,
-    reminderTime: TimeOfDay(
+    reminderTime: NotificationTime(
       hour: json['reminderHour'] ?? 9,
       minute: json['reminderMinute'] ?? 0,
     ),
@@ -31,7 +31,7 @@ class NotificationSettings {
 
   NotificationSettings copyWith({
     bool? isEnabled,
-    TimeOfDay? reminderTime,
+    NotificationTime? reminderTime,
     List<bool>? selectedDays,
   }) {
     return NotificationSettings(
@@ -42,11 +42,11 @@ class NotificationSettings {
   }
 }
 
-class TimeOfDay {
+class NotificationTime {
   final int hour;
   final int minute;
 
-  const TimeOfDay({required this.hour, required this.minute});
+  const NotificationTime({required this.hour, required this.minute});
 
   String format() {
     final hourStr = hour.toString().padLeft(2, '0');
@@ -63,7 +63,7 @@ class NotificationSettingsNotifier extends StateNotifier<NotificationSettings> {
   NotificationSettingsNotifier() : super(
     NotificationSettings(
       isEnabled: false,
-      reminderTime: const TimeOfDay(hour: 9, minute: 0),
+      reminderTime: const NotificationTime(hour: 9, minute: 0),
       selectedDays: List.filled(7, true),
     )
   ) {
@@ -91,7 +91,7 @@ class NotificationSettingsNotifier extends StateNotifier<NotificationSettings> {
     await _saveSettings();
   }
 
-  Future<void> updateReminderTime(TimeOfDay time) async {
+  Future<void> updateReminderTime(NotificationTime time) async {
     state = state.copyWith(reminderTime: time);
     await _saveSettings();
   }
@@ -101,5 +101,18 @@ class NotificationSettingsNotifier extends StateNotifier<NotificationSettings> {
     newDays[dayIndex] = !newDays[dayIndex];
     state = state.copyWith(selectedDays: newDays);
     await _saveSettings();
+  }
+
+  // 실시간 동기화를 위한 메서드들
+
+  /// 실시간 동기화로부터 설정 업데이트
+  void updateFromRealtime(NotificationSettings settings) {
+    state = settings;
+    // SharedPreferences에는 자동으로 저장됨 (RealtimeSyncService에서 처리)
+  }
+
+  /// 스토리지에서 설정을 새로고침 (실시간 동기화 초기화 시 사용)
+  Future<void> refreshFromStorage() async {
+    await _loadSettings();
   }
 }

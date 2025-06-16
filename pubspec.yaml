@@ -47,6 +47,14 @@ dependencies:
   
   # Local Storage
   shared_preferences: ^2.2.2
+  
+  # Network
+  connectivity_plus: ^6.0.3
+  
+  # File handling
+  path_provider: ^2.1.2
+  share_plus: ^7.2.2
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:
