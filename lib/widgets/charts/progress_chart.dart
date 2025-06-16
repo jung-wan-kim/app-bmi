@@ -113,13 +113,13 @@ class _ProgressChartState extends State<ProgressChart>
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withOpacity(0.1),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
           ],
         ),
-        child:const Padding(
+        child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +200,7 @@ class _ProgressChartState extends State<ProgressChart>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppColors.success.withValues(alpha: 0.1),
+                  color: AppColors.success.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -215,7 +215,7 @@ class _ProgressChartState extends State<ProgressChart>
               Text(
                 '달성률',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.6),
+                  color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
                 ),
               ),
             ],
@@ -242,7 +242,7 @@ class _ProgressChartState extends State<ProgressChart>
               '시작',
               '${widget.startWeight.toStringAsFixed(1)} kg',
               Icons.flag_outlined,
-              theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.6),
+              theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
             ),
             _buildDetailItem(
               context,
@@ -265,7 +265,7 @@ class _ProgressChartState extends State<ProgressChart>
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: theme.primaryColor.withValues(alpha: 0.05),
+            color: theme.primaryColor.withOpacity(0.05),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -332,7 +332,7 @@ class _ProgressChartState extends State<ProgressChart>
           Text(
             _getMotivationalMessage(_progressAnimation.value),
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.6),
+              color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
               fontStyle: FontStyle.italic,
             ),
             textAlign: TextAlign.center,
@@ -352,7 +352,8 @@ class _ProgressChartState extends State<ProgressChart>
     final theme = Theme.of(context);
     
     return Column(
-      children: [const Icon(
+      children: [
+        Icon(
           icon,
           size: 24,
           color: color,
@@ -361,7 +362,7 @@ class _ProgressChartState extends State<ProgressChart>
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.6),
+            color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
           ),
         ),
         const SizedBox(height: 2),

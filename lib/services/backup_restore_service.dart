@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/weight_record.dart';
@@ -171,16 +170,9 @@ class BackupRestoreService {
   /// 백업 파일 선택
   Future<String?> selectBackupFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['json'],
-        dialogTitle: 'BMI Tracker 백업 파일 선택',
-      );
-      
-      if (result != null && result.files.single.path != null) {
-        return result.files.single.path;
-      }
-      
+      // 파일 선택 기능을 제거하고 null 반환
+      // UI에서 다른 방법으로 파일을 제공받도록 구현 필요
+      debugPrint('파일 선택 기능이 비활성화됨');
       return null;
     } catch (e) {
       debugPrint('백업 파일 선택 실패: $e');

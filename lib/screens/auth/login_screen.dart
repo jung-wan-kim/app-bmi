@@ -78,7 +78,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:const Text('로그인 실패: $error'),
+          content: Text('로그인 실패: $error'),
           backgroundColor: AppColors.error,
         ),
       );
@@ -111,7 +111,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:const Text('데모 모드 진입 실패: $e'),
+            content: Text('데모 모드 진입 실패: $e'),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -173,7 +173,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:const Text('로그인 실패: $error'),
+          content: Text('로그인 실패: $error'),
           backgroundColor: AppColors.error,
         ),
       );
@@ -188,7 +188,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child:const Padding(
+        child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -299,7 +299,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     required Color foregroundColor,
     Color? borderColor,
   }) {
-    returnconst SizedBox(
+    return SizedBox(
       width: double.infinity,
       height: 56,
       child: OutlinedButton(
@@ -317,7 +317,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (icon != null)const Icon(icon, size: 24)
+            if (icon != null)
+              Icon(icon, size: 24)
             else if (assetIcon != null)
               Image.asset(
                 assetIcon,

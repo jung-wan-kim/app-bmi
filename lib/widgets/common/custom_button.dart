@@ -49,7 +49,7 @@ class CustomButton extends StatelessWidget {
             : (isDark ? Colors.black : Colors.white));
     
     final buttonChild = isLoading
-        ?const SizedBox(
+        ? SizedBox(
             width: 24,
             height: 24,
             child: CircularProgressIndicator(
@@ -61,7 +61,8 @@ class CustomButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) ...[const Icon(
+              if (icon != null) ...[
+                Icon(
                   icon,
                   color: effectiveTextColor,
                   size: 20,
@@ -121,7 +122,7 @@ class CustomButton extends StatelessWidget {
       button: true,
       enabled: onPressed != null && !isLoading,
       label: semanticLabel ?? text,
-      child:const SizedBox(
+      child: SizedBox(
         width: width,
         height: height,
         child: button,

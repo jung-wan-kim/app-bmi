@@ -1,20 +1,94 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+class WeightRecord {
+  final String id;
+  final String userId;
+  final double weight;
+  final double bmi;
+  final DateTime recordedAt;
+  final String? notes;
+  final DateTime createdAt;
 
-part 'weight_record_model.freezed.dart';
-part 'weight_record_model.g.dart';
+  const WeightRecord({
+    required this.id,
+    required this.userId,
+    required this.weight,
+    required this.bmi,
+    required this.recordedAt,
+    this.notes,
+    required this.createdAt,
+  });
 
-@freezed
-class WeightRecord with _$WeightRecord {
-  const factory WeightRecord({
-    required String id,
-    required String userId,
-    required double weight,
-    required double bmi,
-    required DateTime recordedAt,
+  WeightRecord copyWith({
+    String? id,
+    String? userId,
+    double? weight,
+    double? bmi,
+    DateTime? recordedAt,
     String? notes,
-    required DateTime createdAt,
-  }) = _WeightRecord;
+    DateTime? createdAt,
+  }) {
+    return WeightRecord(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      weight: weight ?? this.weight,
+      bmi: bmi ?? this.bmi,
+      recordedAt: recordedAt ?? this.recordedAt,
+      notes: notes ?? this.notes,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 
-  factory WeightRecord.fromJson(Map<String, dynamic> json) =>
-      _$WeightRecordFromJson(json);
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'weight': weight,
+      'bmi': bmi,
+      'recordedAt': recordedAt.toIso8601String(),
+      'notes': notes,
+      'createdAt': createdAt.toIso8601String(),
+    };
+  }
+
+  factory WeightRecord.fromJson(Map<String, dynamic> json) {
+    return WeightRecord(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      weight: (json['weight'] as num).toDouble(),
+      bmi: (json['bmi'] as num).toDouble(),
+      recordedAt: DateTime.parse(json['recordedAt'] as String),
+      notes: json['notes'] as String?,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is WeightRecord &&
+        other.id == id &&
+        other.userId == userId &&
+        other.weight == weight &&
+        other.bmi == bmi &&
+        other.recordedAt == recordedAt &&
+        other.notes == notes &&
+        other.createdAt == createdAt;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      id,
+      userId,
+      weight,
+      bmi,
+      recordedAt,
+      notes,
+      createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'WeightRecord(id: $id, userId: $userId, weight: $weight, bmi: $bmi, recordedAt: $recordedAt, notes: $notes, createdAt: $createdAt)';
+  }
 }

@@ -101,7 +101,7 @@ class _BMICharacterState extends State<BMICharacter>
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withOpacity(0.1),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -168,10 +168,10 @@ class _BMICharacterState extends State<BMICharacter>
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: categoryColor.withValues(alpha: 0.1),
+            color: categoryColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: categoryColor.withValues(alpha: 0.3),
+              color: categoryColor.withOpacity(0.3),
               width: 1,
             ),
           ),
@@ -378,7 +378,7 @@ class _CharacterPainter extends CustomPainter {
 
     // 팔
     final armPaint = Paint()
-      ..color = isOutline ? color : color.withValues(alpha: 0.8)
+      ..color = isOutline ? color : color.withOpacity(0.8)
       ..style = isOutline ? PaintingStyle.stroke : PaintingStyle.fill
       ..strokeWidth = 2;
 
@@ -451,7 +451,7 @@ class _CharacterPainter extends CustomPainter {
                       (1 - morphProgress);
     
     final paint = Paint()
-      ..color = isOutline ? Colors.transparent : color.withValues(alpha: 0.8)
+      ..color = isOutline ? Colors.transparent : color.withOpacity(0.8)
       ..style = isOutline ? PaintingStyle.stroke : PaintingStyle.fill
       ..strokeWidth = 2;
 

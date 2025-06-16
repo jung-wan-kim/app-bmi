@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_constants.dart';
+import '../core/constants/bmi_constants.dart';
 import '../core/utils/bmi_calculator.dart';
 import '../providers/goal_provider.dart';
 import '../providers/weight_records_provider.dart';
@@ -96,7 +97,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content:const Text('목표가 설정되었습니다'),
+              content: Text('목표가 설정되었습니다'),
               backgroundColor: AppColors.success,
             ),
           );
@@ -106,7 +107,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content:const Text('오류가 발생했습니다: $e'),
+              content: Text('오류가 발생했습니다: $e'),
               backgroundColor: AppColors.error,
             ),
           );
@@ -132,7 +133,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
         actions: [
           TextButton(
             onPressed: _isLoading ? null : _saveGoal,
-            child: const Text('
+            child: const Text(
               '저장',
               style: TextStyle(
                 fontSize: 16,
@@ -161,7 +162,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('
+                      const Text(
                         '현재 상태',
                         style: TextStyle(
                           fontSize: 16,
@@ -299,7 +300,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())).withValues(alpha: 0.1),
+                      color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
@@ -310,7 +311,8 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [const Icon(
+                          children: [
+                            Icon(
                               Icons.flag_outlined,
                               color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
                               size: 24,
@@ -353,13 +355,13 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withValues(alpha: 0.1),
+                        color: AppColors.warning.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+                        border: Border.all(color: AppColors.warning.withOpacity(0.3)),
                       ),
                       child: Row(
                         children: [
-                    const Icon(
+                          Icon(
                             Icons.info_outline,
                             color: AppColors.warning,
                             size: 20,

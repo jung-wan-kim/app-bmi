@@ -63,7 +63,7 @@ class AccessibleButton extends StatelessWidget {
               vertical: 12,
             ),
             decoration: BoxDecoration(
-              color: onPressed != null ? bgColor : bgColor.withValues(alpha: 0.5),
+              color: onPressed != null ? bgColor : bgColor.withOpacity(0.5),
               borderRadius: BorderRadius.circular(12),
               border: !meetsContrast ? Border.all(
                 color: isDarkMode ? Colors.white : Colors.black,
@@ -136,10 +136,10 @@ class AccessibleIconButton extends StatelessWidget {
             width: AppAccessibility.minTouchTarget,
             height: AppAccessibility.minTouchTarget,
             padding: const EdgeInsets.all(8),
-            child:const Icon(
+            child: Icon(
               icon,
               size: iconSize ?? 24,
-              color: onPressed != null ? iconColor : iconColor?.withValues(alpha: 0.5),
+              color: onPressed != null ? iconColor : iconColor?.withOpacity(0.5),
             ),
           ),
         ),

@@ -71,11 +71,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             // Skip 버튼
             Align(
               alignment: Alignment.topRight,
-              child:const Padding(
+              child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
                   onPressed: _completeOnboarding,
-                  child: const Text('
+                  child: const Text(
                     '건너뛰기',
                     style: TextStyle(fontSize: 16),
                   ),
@@ -95,7 +95,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             
-            // 인디케이터와 버튼const Padding(
+            // 인디케이터와 버튼
+            Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
@@ -120,7 +121,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   const SizedBox(height: 32),
                   
-                  // 액션 버튼const SizedBox(
+                  // 액션 버튼
+                  SizedBox(
                     width: double.infinity,
                     child: _currentPage == _pages.length - 1
                         ? ElevatedButton(
@@ -157,7 +159,7 @@ class OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    returnconst Padding(
+    return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -212,7 +214,7 @@ class OnboardingPage extends StatelessWidget {
             builder: (context, value, child) {
               return Transform.scale(
                 scale: value,
-                child:const Icon(
+                child: Icon(
                   data.iconFallback,
                   size: 100,
                   color: AppColors.primary,

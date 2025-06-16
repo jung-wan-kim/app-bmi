@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_constants.dart';
 import '../core/constants/gender.dart';
+import '../core/constants/bmi_constants.dart';
 import '../core/utils/bmi_calculator.dart';
 import '../providers/weight_records_provider.dart';
 import '../providers/goal_provider.dart';
@@ -128,12 +129,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: AppColors.warning.withValues(alpha: 0.1),
+                    color: AppColors.warning.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+                    border: Border.all(color: AppColors.warning.withOpacity(0.3)),
                   ),
                   child: Row(
-                    children: [const Icon(Icons.info_outline, color: AppColors.warning, size: 16),
+                    children: [
+                      Icon(Icons.info_outline, color: AppColors.warning, size: 16),
                       const SizedBox(width: 8),
                       Text(
                         '데모 모드로 실행 중입니다',
@@ -167,18 +169,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             margin: const EdgeInsets.only(bottom: 8),
                             decoration: BoxDecoration(
                               color: isOnline 
-                                  ? AppColors.warning.withValues(alpha: 0.1)
-                                  : AppColors.error.withValues(alpha: 0.1),
+                                  ? AppColors.warning.withOpacity(0.1)
+                                  : AppColors.error.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 color: isOnline 
-                                    ? AppColors.warning.withValues(alpha: 0.3)
-                                    : AppColors.error.withValues(alpha: 0.3),
+                                    ? AppColors.warning.withOpacity(0.3)
+                                    : AppColors.error.withOpacity(0.3),
                               ),
                             ),
                             child: Row(
                               children: [
-              const Icon(
+                                Icon(
                                   isOnline ? Icons.cloud_queue : Icons.cloud_off,
                                   color: isOnline ? AppColors.warning : AppColors.error,
                                   size: 16,
@@ -214,15 +216,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             margin: const EdgeInsets.only(bottom: 16),
                             decoration: BoxDecoration(
-                              color: AppColors.success.withValues(alpha: 0.1),
+                              color: AppColors.success.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: AppColors.success.withValues(alpha: 0.3),
+                                color: AppColors.success.withOpacity(0.3),
                               ),
                             ),
                             child: Row(
                               children: [
-                        const Icon(
+                                Icon(
                                   Icons.sync,
                                   color: AppColors.success,
                                   size: 16,
@@ -291,7 +293,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.3),
+                      color: AppColors.primary.withOpacity(0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -306,7 +308,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('
+                            const Text(
                               '현재 체중',
                               style: TextStyle(
                                 color: Colors.white70,
@@ -327,7 +329,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
+                            color: Colors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Icon(
@@ -392,7 +394,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('
+                    const Text(
                       'BMI 상태',
                       style: TextStyle(
                         fontSize: 16,
@@ -426,10 +428,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         border: Border.all(color: AppColors.border),
                       ),
                       child: Column(
-                        children: [const Icon(
+                        children: [
+                          Icon(
                             Icons.flag_outlined,
                             size: 48,
-                            color: AppColors.textSecondary.withValues(alpha: 0.5),
+                            color: AppColors.textSecondary.withOpacity(0.5),
                           ),
                           const SizedBox(height: 12),
                           Text(
@@ -467,7 +470,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('
+                                const Text(
                                   '목표 진행 상황',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -562,19 +565,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           labelType: NavigationRailLabelType.all,
           destinations: const [
             NavigationRailDestination(
-              icon:const Icon(Icons.home_outlined),
-              selectedIcon:const Icon(Icons.home),
-              label:const Text('홈'),
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home),
+              label: Text('홈'),
             ),
             NavigationRailDestination(
-              icon:const Icon(Icons.bar_chart_outlined),
+              icon: Icon(Icons.bar_chart_outlined),
               selectedIcon: Icon(Icons.bar_chart),
-              label:const Text('통계'),
+              label: Text('통계'),
             ),
             NavigationRailDestination(
-              icon:const Icon(Icons.person_outline),
+              icon: Icon(Icons.person_outline),
               selectedIcon: Icon(Icons.person),
-              label:const Text('프로필'),
+              label: Text('프로필'),
             ),
           ],
         ),
@@ -594,12 +597,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: AppColors.warning.withValues(alpha: 0.1),
+                      color: AppColors.warning.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+                      border: Border.all(color: AppColors.warning.withOpacity(0.3)),
                     ),
                     child: Row(
-                      children: [const Icon(Icons.info_outline, color: AppColors.warning, size: 16),
+                      children: [
+                        Icon(Icons.info_outline, color: AppColors.warning, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           '데모 모드로 실행 중입니다',
@@ -633,18 +637,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               margin: const EdgeInsets.only(bottom: 8),
                               decoration: BoxDecoration(
                                 color: isOnline 
-                                    ? AppColors.warning.withValues(alpha: 0.1)
-                                    : AppColors.error.withValues(alpha: 0.1),
+                                    ? AppColors.warning.withOpacity(0.1)
+                                    : AppColors.error.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                   color: isOnline 
-                                      ? AppColors.warning.withValues(alpha: 0.3)
-                                      : AppColors.error.withValues(alpha: 0.3),
+                                      ? AppColors.warning.withOpacity(0.3)
+                                      : AppColors.error.withOpacity(0.3),
                                 ),
                               ),
                               child: Row(
                                 children: [
-                         const Icon(
+                                  Icon(
                                     isOnline ? Icons.cloud_queue : Icons.cloud_off,
                                     color: isOnline ? AppColors.warning : AppColors.error,
                                     size: 16,
@@ -680,15 +684,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               margin: const EdgeInsets.only(bottom: 16),
                               decoration: BoxDecoration(
-                                color: AppColors.success.withValues(alpha: 0.1),
+                                color: AppColors.success.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: AppColors.success.withValues(alpha: 0.3),
+                                  color: AppColors.success.withOpacity(0.3),
                                 ),
                               ),
                               child: Row(
                                 children: [
-                          const Icon(
+                                  Icon(
                                     Icons.sync,
                                     color: AppColors.success,
                                     size: 16,
@@ -776,7 +780,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     borderRadius: BorderRadius.circular(20),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: AppColors.primary.withValues(alpha: 0.3),
+                                        color: AppColors.primary.withOpacity(0.3),
                                         blurRadius: 20,
                                         offset: const Offset(0, 10),
                                       ),
@@ -791,7 +795,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              const Text('
+                                              const Text(
                                                 '현재 체중',
                                                 style: TextStyle(
                                                   color: Colors.white70,
@@ -812,7 +816,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           Container(
                                             padding: const EdgeInsets.all(16),
                                             decoration: BoxDecoration(
-                                              color: Colors.white.withValues(alpha: 0.2),
+                                              color: Colors.white.withOpacity(0.2),
                                               borderRadius: BorderRadius.circular(16),
                                             ),
                                             child: const Icon(
@@ -882,7 +886,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text('
+                                    const Text(
                                       'BMI 상태',
                                       style: TextStyle(
                                         fontSize: 16,
@@ -925,10 +929,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         border: Border.all(color: AppColors.border),
                                       ),
                                       child: Column(
-                                        children: [const Icon(
+                                        children: [
+                                          Icon(
                                             Icons.flag_outlined,
                                             size: 48,
-                                            color: AppColors.textSecondary.withValues(alpha: 0.5),
+                                            color: AppColors.textSecondary.withOpacity(0.5),
                                           ),
                                           const SizedBox(height: 12),
                                           Text(
@@ -966,7 +971,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                const Text('
+                                                const Text(
                                                   '목표 진행 상황',
                                                   style: TextStyle(
                                                     fontSize: 16,
@@ -1067,17 +1072,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       },
       items: const [
         BottomNavigationBarItem(
-          icon:const Icon(Icons.home_outlined),
-          activeIcon:const Icon(Icons.home),
+          icon: Icon(Icons.home_outlined),
+          activeIcon: Icon(Icons.home),
           label: '홈',
         ),
         BottomNavigationBarItem(
-          icon:const Icon(Icons.bar_chart_outlined),
-          activeIcon:const Icon(Icons.bar_chart),
+          icon: Icon(Icons.bar_chart_outlined),
+          activeIcon: Icon(Icons.bar_chart),
           label: '통계',
         ),
         BottomNavigationBarItem(
-          icon:const Icon(Icons.person_outline),
+          icon: Icon(Icons.person_outline),
           activeIcon: Icon(Icons.person),
           label: '프로필',
         ),
@@ -1093,7 +1098,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
+        color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -1258,7 +1263,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             belowBarData: BarAreaData(
               show: true,
-              color: AppColors.primary.withValues(alpha: 0.1),
+              color: AppColors.primary.withOpacity(0.1),
             ),
           ),
         ],

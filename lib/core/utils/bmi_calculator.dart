@@ -1,5 +1,6 @@
 import 'dart:math';
 import '../constants/app_constants.dart';
+import '../constants/bmi_constants.dart';
 
 /// BMI 계산 및 관련 유틸리티
 class BMICalculator {
@@ -99,29 +100,5 @@ class BMICalculator {
       'min': minWeight.toDouble(),
       'max': maxWeight.toDouble(),
     };
-  }
-}
-
-/// BMI 카테고리
-enum BMICategory {
-  underweight,
-  normal,
-  overweight,
-  obese,
-}
-
-/// BMI 카테고리 Extension
-extension BMICategoryExtension on BMICategory {
-  String get displayName {
-    switch (this) {
-      case BMICategory.underweight:
-        return '저체중';
-      case BMICategory.normal:
-        return '정상';
-      case BMICategory.overweight:
-        return '과체중';
-      case BMICategory.obese:
-        return '비만';
-    }
   }
 }
