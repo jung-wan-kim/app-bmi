@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_constants.dart';
+import '../core/constants/gender.dart';
 import '../core/utils/bmi_calculator.dart';
 import '../providers/weight_records_provider.dart';
 import '../providers/goal_provider.dart';
@@ -153,7 +154,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Consumer(
                   builder: (context, ref, child) {
                     final isOnline = ref.watch(isOnlineProvider);
-                    final networkStatus = ref.watch(networkStatusProvider);
+                    // final networkStatus = ref.watch(networkStatusProvider);
                     final offlineQueueSize = ref.watch(offlineQueueSizeProvider);
                     final isRealtimeConnected = ref.watch(isRealtimeConnectedProvider);
                     
@@ -450,8 +451,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     );
                   }
                   
-                  final progress = ref.read(goalProvider.notifier).calculateProgress(currentWeight, startWeight);
-                  final weightDifference = currentWeight - goal.targetWeight;
+                  // final progress = ref.read(goalProvider.notifier).calculateProgress(currentWeight, startWeight);
+                  // final weightDifference = currentWeight - goal.targetWeight;
                   
                   return Column(
                     children: [
@@ -621,7 +622,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Consumer(
                     builder: (context, ref, child) {
                       final isOnline = ref.watch(isOnlineProvider);
-                      final networkStatus = ref.watch(networkStatusProvider);
+                      // final networkStatus = ref.watch(networkStatusProvider);
                       final offlineQueueSize = ref.watch(offlineQueueSizeProvider);
                       final isRealtimeConnected = ref.watch(isRealtimeConnectedProvider);
                       

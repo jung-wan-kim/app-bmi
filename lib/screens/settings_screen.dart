@@ -328,7 +328,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               if (!_isDemoMode) ...[
                 Consumer(
                   builder: (context, ref, child) {
-                    final syncState = ref.watch(syncProvider);
+                    // final syncState = ref.watch(syncProvider);
                     final lastSyncTime = ref.watch(lastSyncTimeProvider);
                     final isSyncing = ref.watch(isSyncingProvider);
                     final syncError = ref.watch(syncErrorProvider);

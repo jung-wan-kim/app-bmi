@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import '../constants/app_accessibility.dart';
 
 /// 접근성 관련 유틸리티 함수
