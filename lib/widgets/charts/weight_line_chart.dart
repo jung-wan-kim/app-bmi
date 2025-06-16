@@ -50,7 +50,7 @@ class WeightLineChart extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -60,8 +60,7 @@ class WeightLineChart extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context),
-            const SizedBox(height: 24),
-            SizedBox(
+            const SizedBox(height: 24),\1const SizedBox(
               height: 250,
               child: LineChart(
                 _buildChartData(
@@ -94,7 +93,7 @@ class WeightLineChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -103,24 +102,23 @@ class WeightLineChart extends StatelessWidget {
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
+          children: [\1const Icon(
               Icons.show_chart,
               size: 64,
-              color: theme.textTheme.bodyLarge?.color?.withOpacity(0.3),
+              color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.3),
             ),
             const SizedBox(height: 16),
             Text(
               '체중 기록이 없습니다',
               style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.textTheme.bodyLarge?.color?.withOpacity(0.5),
+                color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.5),
               ),
             ),
             const SizedBox(height: 8),
             Text(
               '체중을 기록하면 그래프가 표시됩니다',
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.textTheme.bodyLarge?.color?.withOpacity(0.4),
+                color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.4),
               ),
             ),
           ],
@@ -150,7 +148,7 @@ class WeightLineChart extends StatelessWidget {
             Text(
               _getPeriodText(),
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+                color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -170,7 +168,7 @@ class WeightLineChart extends StatelessWidget {
                 Text(
                   'BMI ${latestBmi.toStringAsFixed(1)}',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+                    color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.6),
                   ),
                 ),
             ],
@@ -283,7 +281,7 @@ class WeightLineChart extends StatelessWidget {
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: theme.primaryColor.withOpacity(0.1),
+            color: theme.primaryColor.withValues(alpha: 0.1),
           ),
         ),
         // 목표 체중 라인
@@ -345,7 +343,7 @@ class WeightLineChart extends StatelessWidget {
                 return const SizedBox.shrink();
               }
               final date = sortedRecords[index].recordedAt;
-              return Padding(
+              return\1const Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   _formatDate(date),

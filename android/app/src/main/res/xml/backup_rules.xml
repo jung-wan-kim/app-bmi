@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- 크기 최적화를 위해 백업에서 제외할 파일들 -->
+    <exclude domain="cache" />
+    <exclude domain="no_backup" />
+    
+    <!-- 임시 파일 제외 -->
+    <exclude domain="file" path="tmp/" />
+    <exclude domain="file" path="cache/" />
+    
+    <!-- 큰 미디어 파일 제외 -->
+    <exclude domain="file" path="images/large/" />
+    <exclude domain="file" path="videos/" />
+</full-backup-content>

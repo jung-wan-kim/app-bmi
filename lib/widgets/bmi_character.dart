@@ -85,11 +85,11 @@ class _BMICharacterState extends State<BMICharacter>
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: color.withOpacity(0.9),
+                            color: color.withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: color.withOpacity(0.3),
+                                color: color.withValues(alpha: 0.3),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -120,10 +120,10 @@ class _BMICharacterState extends State<BMICharacter>
               vertical: 8,
             ),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: color.withOpacity(0.3),
+                color: color.withValues(alpha: 0.3),
                 width: 1.5,
               ),
             ),
@@ -241,7 +241,7 @@ class BMIProgressIndicator extends StatelessWidget {
                 child: Container(
                   width: 2,
                   height: 20,
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                 ),
               ),
               // 현재 위치 표시
@@ -256,7 +256,7 @@ class BMIProgressIndicator extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),

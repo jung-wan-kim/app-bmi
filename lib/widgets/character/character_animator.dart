@@ -326,7 +326,7 @@ class ParticlePainter extends CustomPainter {
     for (final particle in particles) {
       final opacity = 1.0 - progress;
       final paint = Paint()
-        ..color = particle.color.withOpacity(opacity * 0.8)
+        ..color = particle.color.withValues(alpha: opacity * 0.8)
         ..style = PaintingStyle.fill;
 
       final position = Offset(

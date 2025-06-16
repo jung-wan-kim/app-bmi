@@ -106,7 +106,7 @@ class _AdvancedBMICharacterState extends State<AdvancedBMICharacter>
                   width: widget.size * 0.6,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.all(
                       Radius.elliptical(widget.size * 0.3, 10),
                     ),
@@ -135,11 +135,11 @@ class _AdvancedBMICharacterState extends State<AdvancedBMICharacter>
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.9),
+                    color: color.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
-                        color: color.withOpacity(0.3),
+                        color: color.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 3),
                       ),
@@ -147,8 +147,7 @@ class _AdvancedBMICharacterState extends State<AdvancedBMICharacter>
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
+                    children: [\1const Icon(
                         _getCategoryIcon(category),
                         color: Colors.white,
                         size: 18,
@@ -174,10 +173,10 @@ class _AdvancedBMICharacterState extends State<AdvancedBMICharacter>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(25),
               border: Border.all(
-                color: color.withOpacity(0.3),
+                color: color.withValues(alpha: 0.3),
                 width: 2,
               ),
             ),
@@ -248,7 +247,7 @@ class AdvancedBodyPainter extends CustomPainter {
     final outlinePaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.5
-      ..color = primaryColor.withOpacity(0.3);
+      ..color = primaryColor.withValues(alpha: 0.3);
 
     final centerX = size.width / 2;
     final centerY = size.height / 2;
@@ -308,7 +307,7 @@ class AdvancedBodyPainter extends CustomPainter {
     canvas.drawPath(facePath, outlinePaint);
     
     // 귀
-    paint.color = skinColor.withOpacity(0.9);
+    paint.color = skinColor.withValues(alpha: 0.9);
     canvas.drawCircle(
       Offset(centerX - headRadius * 0.9, centerY),
       headRadius * 0.25,
@@ -443,7 +442,7 @@ class AdvancedBodyPainter extends CustomPainter {
     
     // 가슴 디테일 (여성)
     if (gender == Gender.female) {
-      paint.color = skinColor.withOpacity(0.8);
+      paint.color = skinColor.withValues(alpha: 0.8);
       final bustY = chestY + size.height * 0.03;
       
       // 왼쪽
@@ -635,7 +634,7 @@ class AdvancedBodyPainter extends CustomPainter {
     }
     
     // 코
-    facePaint.color = Colors.brown.shade300.withOpacity(0.3);
+    facePaint.color = Colors.brown.shade300.withValues(alpha: 0.3);
     canvas.drawOval(
       Rect.fromCenter(
         center: Offset(centerX, centerY + size.height * 0.02),

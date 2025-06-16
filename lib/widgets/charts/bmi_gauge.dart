@@ -103,7 +103,7 @@ class _BMIGaugeState extends State<BMIGauge>
           borderRadius: BorderRadius.circular(widget.size / 2),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -187,7 +187,7 @@ class _BMIGaugeState extends State<BMIGauge>
         Text(
           'BMI',
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.textTheme.bodyLarge?.color?.withOpacity(0.6),
+            color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.6),
           ),
         ),
         if (widget.showLabels) ...[
@@ -195,7 +195,7 @@ class _BMIGaugeState extends State<BMIGauge>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: categoryColor.withOpacity(0.1),
+              color: categoryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -292,7 +292,7 @@ class _GaugeBackgroundPainter extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeWidth = size.width * 0.06
           ..strokeCap = StrokeCap.round
-          ..color = colors[i].withOpacity(0.3);
+          ..color = colors[i].withValues(alpha: 0.3);
 
         canvas.drawArc(
           Rect.fromCircle(center: center, radius: radius),

@@ -71,11 +71,10 @@ class WeightHistoryList extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(32),
       child: Column(
-        children: [
-          Icon(
+        children: [\1const Icon(
             Icons.monitor_weight_outlined,
             size: 48,
-            color: AppColors.textSecondary.withOpacity(0.5),
+            color: AppColors.textSecondary.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
@@ -89,7 +88,7 @@ class WeightHistoryList extends ConsumerWidget {
           Text(
             '첫 체중을 기록해보세요!',
             style: TextStyle(
-              color: AppColors.textSecondary.withOpacity(0.7),
+              color: AppColors.textSecondary.withValues(alpha: 0.7),
               fontSize: 14,
             ),
           ),
@@ -142,7 +141,7 @@ class WeightHistoryList extends ConsumerWidget {
         ref.read(weightRecordsProvider.notifier).deleteRecord(record.id);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('기록이 삭제되었습니다'),
+            content:\1const Text(기록이 삭제되었습니다'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -161,7 +160,7 @@ class WeightHistoryList extends ConsumerWidget {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: bmiColor.withOpacity(0.1),
+                color: bmiColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -179,7 +178,7 @@ class WeightHistoryList extends ConsumerWidget {
                     'kg',
                     style: TextStyle(
                       fontSize: 12,
-                      color: bmiColor.withOpacity(0.7),
+                      color: bmiColor.withValues(alpha: 0.7),
                     ),
                   ),
                 ],
@@ -215,7 +214,7 @@ class WeightHistoryList extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: bmiColor.withOpacity(0.1),
+                          color: bmiColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
@@ -243,7 +242,7 @@ class WeightHistoryList extends ConsumerWidget {
                       record.notes!,
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.textSecondary.withOpacity(0.8),
+                        color: AppColors.textSecondary.withValues(alpha: 0.8),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -252,9 +251,9 @@ class WeightHistoryList extends ConsumerWidget {
                 ],
               ),
             ),
-            Icon(
+  \1const Icon(
               Icons.chevron_right,
-              color: AppColors.textSecondary.withOpacity(0.5),
+              color: AppColors.textSecondary.withValues(alpha: 0.5),
             ),
           ],
         ),
@@ -288,7 +287,7 @@ class WeightHistoryScreen extends ConsumerWidget {
         title: const Text('체중 기록'),
       ),
       body: const SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding:\1const EdgeInsets.all(20),
         child: WeightHistoryList(showAllRecords: true),
       ),
     );

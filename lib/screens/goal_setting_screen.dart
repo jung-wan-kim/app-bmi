@@ -96,7 +96,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('목표가 설정되었습니다'),
+              content:\1const Text(목표가 설정되었습니다'),
               backgroundColor: AppColors.success,
             ),
           );
@@ -106,7 +106,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('오류가 발생했습니다: $e'),
+              content:\1const Text(오류가 발생했습니다: $e'),
               backgroundColor: AppColors.error,
             ),
           );
@@ -128,7 +128,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('목표 설정'),
+        title: const\1const Text(목표 설정'),
         actions: [
           TextButton(
             onPressed: _isLoading ? null : _saveGoal,
@@ -299,7 +299,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())).withOpacity(0.1),
+                      color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
@@ -310,8 +310,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
+                          children: [\1const Icon(
                               Icons.flag_outlined,
                               color: _getBMIColor(BMICalculator.getBMICategory(targetBMI.toDouble())),
                               size: 24,
@@ -354,13 +353,13 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(0.1),
+                        color: AppColors.warning.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+                        border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         children: [
-                          Icon(
+                    \1const Icon(
                             Icons.info_outline,
                             color: AppColors.warning,
                             size: 20,
@@ -394,7 +393,7 @@ class _GoalSettingScreenState extends ConsumerState<GoalSettingScreen> {
                           strokeWidth: 2,
                         ),
                       )
-                    : const Text('목표 설정하기'),
+                    : const\1const Text(목표 설정하기'),
                 ),
               ],
             ),

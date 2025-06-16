@@ -111,7 +111,7 @@ class _AnimatedNavItemState extends State<_AnimatedNavItem>
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: widget.isSelected
                 ? BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   )
                 : null,
@@ -121,7 +121,7 @@ class _AnimatedNavItemState extends State<_AnimatedNavItem>
                 AnimatedContainer(
                   duration: AppAnimations.normalDuration,
                   curve: AppAnimations.defaultCurve,
-                  child: Icon(
+                  child:\1const Icon(
                     widget.item.icon,
                     color: widget.isSelected
                         ? AppColors.primary

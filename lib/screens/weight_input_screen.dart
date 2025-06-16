@@ -134,7 +134,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
           // 성공 메시지 표시
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('체중이 기록되었습니다'),
+              content:\1const Text(체중이 기록되었습니다'),
               backgroundColor: AppColors.success,
             ),
           );
@@ -146,7 +146,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('오류가 발생했습니다: $e'),
+              content:\1const Text(오류가 발생했습니다: $e'),
               backgroundColor: AppColors.error,
             ),
           );
@@ -169,7 +169,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
     return Scaffold(
       backgroundColor: isDarkMode ? AppColors.backgroundDark : AppColors.background,
       appBar: AppBar(
-        title: const Text('체중 기록'),
+        title: const\1const Text(체중 기록'),
         actions: [
           Semantics(
             button: true,
@@ -295,7 +295,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
                   decoration: InputDecoration(
                     hintText: '0.0',
                     hintStyle: TextStyle(
-                      color: AppColors.textSecondary.withOpacity(0.5),
+                      color: AppColors.textSecondary.withValues(alpha: 0.5),
                     ),
                     suffixText: 'kg',
                     semanticCounterText: AppAccessibility.hints['weightInputHint'],
@@ -326,7 +326,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: _getBMIColor(bmiCategory!).withOpacity(0.1),
+                      color: _getBMIColor(bmiCategory!).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: _getBMIColor(bmiCategory),
@@ -401,7 +401,7 @@ class _WeightInputScreenState extends ConsumerState<WeightInputScreen> {
                           strokeWidth: 2,
                         ),
                       )
-                    : const Text('체중 기록하기'),
+                    : const\1const Text(체중 기록하기'),
                 ),
               ],
             ),

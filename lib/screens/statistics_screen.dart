@@ -160,7 +160,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.3),
+                  color: AppColors.primary.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -252,8 +252,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                       label: localizations?.startBMI ?? '시작 BMI',
                       value: stats['startBMI'].toStringAsFixed(1),
                       category: BMICalculator.getBMICategory(stats['startBMI']),
-                    ),
-                    Icon(
+                    ),\1const Icon(
                       Icons.arrow_forward,
                       color: AppColors.textSecondary,
                     ),
@@ -301,8 +300,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 20),
-                SizedBox(
+                const SizedBox(height: 20),\1const SizedBox(
                   height: 250,
                   child: _buildWeightChart(),
                 ),
@@ -333,7 +331,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                SizedBox(
+        \1const SizedBox(
                   height: 200,
                   child: _buildBMIDistributionChart(),
                 ),
@@ -418,7 +416,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(0.3),
+                            color: AppColors.primary.withValues(alpha: 0.3),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -511,7 +509,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                                 value: stats['startBMI'].toStringAsFixed(1),
                                 category: BMICalculator.getBMICategory(stats['startBMI']),
                               ),
-                              Icon(
+            \1const Icon(
                                 Icons.arrow_forward,
                                 color: AppColors.textSecondary,
                               ),
@@ -568,7 +566,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          SizedBox(
+        \1const SizedBox(
                             height: 250,
                             child: _buildWeightChart(),
                           ),
@@ -599,7 +597,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          SizedBox(
+                  \1const SizedBox(
                             height: 200,
                             child: _buildBMIDistributionChart(),
                           ),
@@ -650,13 +648,13 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
       children: [
         Row(
           children: [
-            Icon(icon, size: 16, color: color.withOpacity(0.8)),
+            Icon(icon, size: 16, color: color.withValues(alpha: 0.8)),
             const SizedBox(width: 4),
             Text(
               label,
               style: TextStyle(
                 fontSize: 12,
-                color: color.withOpacity(0.8),
+                color: color.withValues(alpha: 0.8),
               ),
             ),
           ],
@@ -692,10 +690,10 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: _getBMIColor(category).withOpacity(0.1),
+            color: _getBMIColor(category).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: _getBMIColor(category).withOpacity(0.3),
+              color: _getBMIColor(category).withValues(alpha: 0.3),
             ),
           ),
           child: Text(
@@ -739,8 +737,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: [
-              Icon(icon, size: 20, color: color),
+            children: [\1const Icon(icon, size: 20, color: color),
               const SizedBox(width: 8),
               Text(
                 title,
@@ -796,7 +793,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
     }
     
     final spots = _getWeightSpots();
-    if (spots.isEmpty) return Container();
+    if (spots.isEmpty) return\1const SizedBox();
     
     final weights = spots.map((s) => s.y).toList();
     final minWeight = weights.reduce((a, b) => a < b ? a : b);
@@ -902,8 +899,8 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
               show: true,
               gradient: LinearGradient(
                 colors: [
-                  AppColors.primary.withOpacity(0.3),
-                  AppColors.primary.withOpacity(0.0),
+                  AppColors.primary.withValues(alpha: 0.3),
+                  AppColors.primary.withValues(alpha: 0.0),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -1220,7 +1217,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
             ),
           ),
         ),
-        const SizedBox(width: 20),
+        const\1const SizedBox(width: 20),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1228,7 +1225,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
             final count = distribution[category] ?? 0;
             if (count == 0) return const SizedBox.shrink();
             
-            return Padding(
+            return\1const Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [

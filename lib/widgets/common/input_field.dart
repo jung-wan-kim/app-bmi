@@ -196,12 +196,12 @@ class _InputFieldState extends State<InputField> {
         labelStyle: widget.labelStyle ?? TextStyle(
           color: _focusNode.hasFocus 
               ? theme.primaryColor 
-              : theme.textTheme.bodyLarge?.color?.withOpacity(0.7),
+              : theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
           fontSize: 16,
         ),
         hintText: widget.hint,
         hintStyle: widget.hintStyle ?? TextStyle(
-          color: theme.textTheme.bodyLarge?.color?.withOpacity(0.5),
+          color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.5),
           fontSize: 16,
         ),
         errorText: _errorText,
@@ -211,9 +211,9 @@ class _InputFieldState extends State<InputField> {
         suffixText: widget.suffixText,
         suffixIcon: widget.obscureText
             ? IconButton(
-                icon: Icon(
+                icon:\1const Icon(
                   _obscureText ? Icons.visibility : Icons.visibility_off,
-                  color: theme.iconTheme.color?.withOpacity(0.7),
+                  color: theme.iconTheme.color?.withValues(alpha: 0.7),
                 ),
                 onPressed: _toggleObscureText,
                 tooltip: _obscureText ? '비밀번호 표시' : '비밀번호 숨기기',
@@ -310,7 +310,7 @@ class NumericInputField extends StatelessWidget {
         onChanged(number);
       },
       suffixText: suffix,
-      prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+      prefixIcon: prefixIcon != null ?\1const Icon(prefixIcon) : null,
       enabled: enabled,
       semanticLabel: semanticLabel,
     );

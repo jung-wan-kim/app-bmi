@@ -57,7 +57,7 @@ class _AnimatedLoadingState extends State<AnimatedLoading>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return\1const SizedBox(
       width: widget.size,
       height: widget.size,
       child: AnimatedBuilder(
@@ -102,7 +102,7 @@ class _LoadingPainter extends CustomPainter {
     final radius = (size.width - paint.strokeWidth) / 2;
 
     // 원 그리기
-    paint.color = color.withOpacity(0.2);
+    paint.color = color.withValues(alpha: 0.2);
     canvas.drawCircle(center, radius, paint);
 
     // 진행 중인 호 그리기
@@ -137,7 +137,7 @@ class FullScreenLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.5),
+      color: Colors.black.withValues(alpha: 0.5),
       child: Center(
         child: FadeInAnimation(
           child: Container(

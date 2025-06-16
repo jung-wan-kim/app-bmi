@@ -80,7 +80,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('프로필 저장 실패: $error'),
+            content:\1const Text(프로필 저장 실패: $error'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -343,7 +343,7 @@ class _GenderCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary.withOpacity(0.1) : AppColors.surface,
+          color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : AppColors.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.border,
@@ -351,8 +351,7 @@ class _GenderCard extends StatelessWidget {
           ),
         ),
         child: Column(
-          children: [
-            Icon(
+          children: [\1const Icon(
               icon,
               size: 40,
               color: isSelected ? AppColors.primary : AppColors.textSecondary,

@@ -28,7 +28,7 @@ class BMICharacterPainter extends CustomPainter {
     final outlinePaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0
-      ..color = primaryColor.withOpacity(0.3);
+      ..color = primaryColor.withValues(alpha: 0.3);
 
     // 중심점
     final centerX = size.width / 2;
@@ -62,7 +62,7 @@ class BMICharacterPainter extends CustomPainter {
 
   void _drawHead(Canvas canvas, Paint paint, Paint outlinePaint, 
                  double centerX, double centerY, Size size) {
-    paint.color = primaryColor.withOpacity(0.9);
+    paint.color = primaryColor.withValues(alpha: 0.9);
     
     final headRadius = size.width * 0.12;
     canvas.drawCircle(Offset(centerX, centerY), headRadius, paint);
@@ -105,7 +105,7 @@ class BMICharacterPainter extends CustomPainter {
   void _drawBody(Canvas canvas, Paint paint, Paint outlinePaint, 
                  double centerX, double centerY, Size size,
                  double widthFactor, double bellyFactor, double breathingOffset) {
-    paint.color = primaryColor.withOpacity(0.8);
+    paint.color = primaryColor.withValues(alpha: 0.8);
     
     final bodyPath = Path();
     final shoulderY = centerY - size.height * 0.2;
@@ -165,7 +165,7 @@ class BMICharacterPainter extends CustomPainter {
 
     // 가슴 부분 (성별에 따라)
     if (gender == Gender.female) {
-      paint.color = primaryColor.withOpacity(0.7);
+      paint.color = primaryColor.withValues(alpha: 0.7);
       final chestY = shoulderY + size.height * 0.08;
       canvas.drawCircle(
         Offset(centerX - shoulderWidth * 0.4, chestY),
@@ -182,7 +182,7 @@ class BMICharacterPainter extends CustomPainter {
 
   void _drawArms(Canvas canvas, Paint paint, Paint outlinePaint,
                  double centerX, double shoulderY, Size size, double widthFactor) {
-    paint.color = primaryColor.withOpacity(0.85);
+    paint.color = primaryColor.withValues(alpha: 0.85);
     
     final armWidth = size.width * 0.06 * widthFactor;
     final armLength = size.height * 0.25;
@@ -225,7 +225,7 @@ class BMICharacterPainter extends CustomPainter {
 
   void _drawLegs(Canvas canvas, Paint paint, Paint outlinePaint,
                  double centerX, double hipY, Size size, double widthFactor) {
-    paint.color = primaryColor.withOpacity(0.85);
+    paint.color = primaryColor.withValues(alpha: 0.85);
     
     final legWidth = size.width * 0.08 * widthFactor;
     final legLength = size.height * 0.25;
